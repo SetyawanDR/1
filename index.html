@@ -121,22 +121,22 @@
             animation: crossFadeAfter 6s infinite;
         }
 
-        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) */
+        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) DENGAN LEBAR KANAN-KIRI DIPERLEBAR */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
                 height: auto !important;
                 min-height: 100vh;
-                padding: 16px !important;
+                padding: 10px !important; /* Padding diperkecil agar lebih melebar ke kanan-kiri */
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: flex-start !important;
             }
             header {
                 width: 100% !important;
-                max-width: 350px !important;
-                margin: 0 auto 16px auto !important;
-                justify-content: flex-start !important; /* Geser tulisan nama agak ke kiri */
+                max-width: 100% !important;
+                margin: 0 auto 12px auto !important;
+                justify-content: flex-start !important;
             }
             .flex-1.pt-2.relative {
                 position: relative !important;
@@ -145,25 +145,25 @@
                 align-items: center !important;
                 width: 100% !important;
                 padding: 0 !important;
-                gap: 16px !important;
+                gap: 12px !important;
             }
-            /* Urutan Elemen di HP: Wallpaper -> Waktu -> 8 Ikon -> Musik */
+            /* Kontainer Widget Kanan & Kiri dilebarkan hampir memenuhi layar */
             .w-\[330px\] {
                 width: 100% !important;
-                max-width: 350px !important;
+                max-width: 100% !important;
                 display: flex !important;
                 flex-direction: column !important;
-                gap: 16px !important;
+                gap: 12px !important;
             }
-            /* Wallpaper di urutan ke-1 (Paling Atas) */
+            /* 1. Wallpaper di urutan ke-1 */
             .w-\[330px\] > div:nth-child(1) {
                 order: 1 !important;
             }
-            /* Tanggal & Waktu di urutan ke-2 */
+            /* 2. Tanggal & Waktu di urutan ke-2 */
             .w-\[330px\] > div:nth-child(2) {
                 order: 2 !important;
             }
-            /* 8 Ikon Folder di urutan ke-3 */
+            /* 3. 8 Ikon Utama di urutan ke-3 (Grid 2 Kolom melebar) */
             .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
@@ -171,32 +171,32 @@
                 transform: none !important;
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 16px !important;
+                gap: 12px !important;
                 width: 100% !important;
-                max-width: 350px !important;
+                max-width: 100% !important;
                 justify-items: center !important;
                 order: 3 !important;
             }
-            /* Musik (Now Playing) di urutan ke-4 (Di bawah 8 ikon) */
+            /* 4. Widget Musik (Now Playing) dipindah ke urutan ke-4 (Di bawah 8 ikon) */
             .w-\[330px\] > div:nth-child(3) {
                 order: 4 !important;
             }
             footer {
-                margin-top: 24px !important;
+                margin-top: 16px !important;
                 width: 100% !important;
             }
             footer .glass-panel {
-                flex-wrap: nowrap !important; /* Paksa 1 baris saja */
+                flex-wrap: nowrap !important;
                 justify-content: center !important;
                 gap: 6px !important;
                 padding: 8px 10px !important;
-                max-width: 350px !important;
+                max-width: 100% !important;
                 margin: 0 auto;
-                overflow-x: auto; /* Bisa digeser horizontal halus jika layar sangat kecil */
+                overflow-x: auto;
             }
             footer .dock-icon {
-                width: 34px !important;
-                height: 34px !important;
+                width: 36px !important;
+                height: 36px !important;
                 flex-shrink: 0;
             }
         }
@@ -861,7 +861,7 @@
         }, 1000);
 
         // -----------------------------------------------------------
-        // KONTROL PLAYLIST & PEMUTAR MUSIK (DIPERBARUI SESUAI URUTAN BARU)
+        // KONTROL PLAYLIST & PEMUTAR MUSIK
         // -----------------------------------------------------------
         const playlist = [
             { title: "168", artist: "Monita Tahalea", file: "music/music (1).mp3" },
@@ -986,7 +986,6 @@
             audio.volume = e.target.value;
         });
 
-        // Inisialisasi awal lagu pertama
         loadSong(0);
 
         // -----------------------------------------------------------
@@ -1142,13 +1141,11 @@
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
-            // Event Mouse (Desktop)
             canvas.onmousedown = startDraw;
             canvas.onmousemove = draw;
             canvas.onmouseup = stopDraw;
             canvas.onmouseleave = stopDraw;
 
-            // Event Touch (Handphone / Layar Sentuh)
             canvas.ontouchstart = (e) => {
                 e.preventDefault();
                 const touch = e.touches[0];
@@ -1260,7 +1257,6 @@
         }
         function closeSketchWindow() { document.getElementById('sketch-modal').classList.add('hidden'); }
 
-        // FUNGSI LOAD FOTO/SKETCH DENGAN INDIKATOR LOADING
         function loadFolderWithLoading(folderName, gridId, loadingId) {
             const grid = document.getElementById(gridId);
             const loading = document.getElementById(loadingId);
@@ -1305,7 +1301,6 @@
             setTimeout(() => { loading.style.display = 'none'; }, 2000);
         }
 
-        // FUNGSI LOAD NEXT LEVEL SKETCH DENGAN INDIKATOR LOADING
         function openNextLevelSketchWindow() {
             document.getElementById('next-level-sketch-modal').classList.remove('hidden');
             loadNextLevelSketchFolder();
@@ -1357,9 +1352,6 @@
             document.getElementById('image-viewer-modal').classList.add('hidden');
         }
 
-        // -----------------------------------------------------------
-        // MANAJEMEN WINDOWS VIDEO (MASONRY) DENGAN LOADING
-        // -----------------------------------------------------------
         function openVideosWindow() {
             document.getElementById('videos-modal').classList.remove('hidden');
             loadVideoFolder();
@@ -1420,9 +1412,6 @@
             videoViewer.src = "";
         }
 
-        // -----------------------------------------------------------
-        // MANAJEMEN WINDOWS RESUME
-        // -----------------------------------------------------------
         function openResumeWindow() {
             document.getElementById('resume-modal').classList.remove('hidden');
         }
