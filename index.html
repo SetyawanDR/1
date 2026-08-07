@@ -121,7 +121,7 @@
             animation: crossFadeAfter 6s infinite;
         }
 
-        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) MENGGUNAKAN METODE ORDER FLEXBOX/GRID */
+        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
@@ -134,8 +134,8 @@
             }
             header {
                 width: 100% !important;
-                max-width: 370px !important;
-                margin: 0 auto 12px auto !important;
+                max-width: 375px !important;
+                margin: 0 auto 14px auto !important;
                 justify-content: flex-start !important;
             }
             .flex-1.pt-2.relative {
@@ -145,56 +145,44 @@
                 align-items: center !important;
                 width: 100% !important;
                 padding: 0 !important;
-                gap: 12px !important;
+                gap: 14px !important;
             }
-
-            /* Mengubah area desktop container menjadi flex column agar urutan bisa diatur dengan .order */
-            .desktop-container {
+            /* Kontainer Elemen di HP dengan max-width disesuaikan sangat sedikit */
+            .w-\[330px\] {
+                width: 100% !important;
+                max-width: 375px !important;
                 display: flex !important;
                 flex-direction: column !important;
-                width: 100% !important;
-                max-width: 370px !important;
-                position: relative !important;
-                top: auto !important;
-                left: auto !important;
-                transform: none !important;
-                gap: 12px !important;
+                gap: 14px !important;
             }
-
-            /* 1. Widget Wallpaper di Urutan ke-1 */
-            .mobile-wallpaper {
+            /* 1. Wallpaper di urutan ke-1 */
+            .w-\[330px\] > div:nth-child(1) {
                 order: 1 !important;
-                width: 100% !important;
             }
-
-            /* 2. Widget Tanggal & Waktu di Urutan ke-2 */
-            .mobile-datetime {
+            /* 2. Tanggal & Waktu di urutan ke-2 */
+            .w-\[330px\] > div:nth-child(2) {
                 order: 2 !important;
-                width: 100% !important;
             }
-
-            /* 3. 8 Ikon Utama di Urutan ke-3 */
-            .mobile-icons-grid {
-                order: 3 !important;
+            /* 3. 8 Ikon Utama di urutan ke-3 (Menggunakan flex/grid manual agar urutan flexbox konsisten) */
+            .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 transform: none !important;
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 12px !important;
+                gap: 14px !important;
                 width: 100% !important;
+                max-width: 375px !important;
                 justify-items: center !important;
+                order: 3 !important;
             }
-
-            /* 4. Widget Musik (Now Playing) di Urutan ke-4 (Benar-benar di bawah 8 ikon) */
-            .mobile-music-widget {
+            /* 4. Widget Musik dipaksa persis di bawah 8 ikon utama (urutan ke-4) */
+            .w-\[330px\] > div:nth-child(3) {
                 order: 4 !important;
-                width: 100% !important;
             }
-
             footer {
-                margin-top: 16px !important;
+                margin-top: 20px !important;
                 width: 100% !important;
             }
             footer .glass-panel {
@@ -202,7 +190,7 @@
                 justify-content: center !important;
                 gap: 6px !important;
                 padding: 8px 10px !important;
-                max-width: 370px !important;
+                max-width: 375px !important;
                 margin: 0 auto;
                 overflow-x: auto;
             }
@@ -239,11 +227,11 @@
     <!-- MAIN CONTAINER (AREA DESKTOP & WIDGETS) -->
     <div class="flex justify-end items-start flex-1 pt-2 relative">
 
-        <!-- KONTAINER UTAMA UNTUK MENGATUR URUTAN DI HP MENGGUNAKAN METODE RESTSTRUKTURISASI FLEXBOX/GRID -->
-        <div class="desktop-container">
+        <!-- WIDGETS DI KANAN / TENGAH (DIV UTAMA) -->
+        <div class="w-[330px] flex flex-col space-y-4 z-10">
 
             <!-- 1. WIDGET WALLPAPER -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between mobile-wallpaper z-10">
+            <div class="glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between">
                 <span class="text-[10px] tracking-widest text-gray-800 font-bold">WALLPAPER</span>
                 <div class="flex space-x-2">
                     <button class="w-7 h-7 rounded-full bg-amber-200/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">☀️</button>
@@ -254,83 +242,14 @@
             </div>
 
             <!-- 2. WIDGET WAKTU, TANGGAL, BULAN, & TAHUN -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg text-center mobile-datetime z-10">
+            <div class="glass-panel p-4 rounded-2xl shadow-lg text-center">
                 <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-1">DATE & TIME</div>
                 <div id="live-time" class="text-2xl font-bold text-gray-900 tracking-wider">00:00:00</div>
                 <div id="live-date" class="text-xs text-gray-700 mt-1 font-semibold">Senin, 1 Januari 2026</div>
             </div>
 
-            <!-- 3. AREA 8 FOLDER UTAMA -->
-            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-6 z-10 mobile-icons-grid">
-                
-                <!-- 1. videos -->
-                <div onclick="openVideosWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        🎬
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">videos</span>
-                </div>
-
-                <!-- 2. photos -->
-                <div onclick="openPhotosWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        📸
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">photos</span>
-                </div>
-
-                <!-- 3. sketch -->
-                <div onclick="openSketchWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        ✏️
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">sketch</span>
-                </div>
-
-                <!-- 4. next level sketch -->
-                <div onclick="openNextLevelSketchWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        🎨
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide text-center">next level sketch</span>
-                </div>
-
-                <!-- 5. resume -->
-                <div onclick="openResumeWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        📄
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">resume</span>
-                </div>
-
-                <!-- 6. myself -->
-                <div onclick="openMyselfWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        👤
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">myself</span>
-                </div>
-
-                <!-- 7. sticky note (Canvas Drawing) -->
-                <div onclick="openStickyWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        📝
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">sticky note</span>
-                </div>
-
-                <!-- 8. notebook (Apple Notes App) -->
-                <div onclick="openNotebookApp()" class="desktop-item flex flex-col items-center cursor-pointer group">
-                    <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
-                        📓
-                    </div>
-                    <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">notebook</span>
-                </div>
-
-            </div>
-
-            <!-- 4. WIDGET NOW PLAYING (DIPISAHKAN DARI WIDGET WAKTU SEHINGGA BISA DIATUR KE URUTAN KE-4 DI HP) -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg flex flex-col relative mobile-music-widget z-10 w-[330px]">
+            <!-- 3. WIDGET NOW PLAYING (POSISI DI BAWAH 8 IKON PADA TAMPILAN HP) -->
+            <div class="glass-panel p-4 rounded-2xl shadow-lg flex flex-col relative">
                 <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-3 uppercase">Now Playing</div>
                 
                 <div class="bg-[#48534f] rounded-xl p-3 flex flex-col text-white shadow-inner relative font-sans">
@@ -400,981 +319,75 @@
 
         </div>
 
-    </div>
+        <!-- AREA 8 FOLDER DI TENGAH -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-6 z-10">
+            
+            <!-- 1. videos -->
+            <div onclick="openVideosWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    🎬
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">videos</span>
+            </div>
 
-    <!-- DOCK / TASKBAR SOSIAL MEDIA DI BAGIAN BAWAH -->
-    <footer class="w-full flex flex-col items-center pb-2 z-10">
-        <div class="glass-panel px-3 py-2 rounded-2xl shadow-2xl flex items-center space-x-3">
-            
-            <!-- Instagram 1 -->
-            <a href="https://www.instagram.com/setyawandr_" target="_blank" title="Instagram Utama" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- Instagram 2 -->
-            <a href="https://www.instagram.com/just.shift_" target="_blank" title="Instagram Kedua" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.262-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- GitHub -->
-            <a href="https://github.com/SetyawanDR" target="_blank" title="GitHub" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#24292e] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
-            
-            <!-- Steam -->
-            <a href="https://steamcommunity.com/id/zxsty1_" target="_blank" title="Steam" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#171a21] p-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/250px-Steam_icon_logo.svg.png" alt="Steam Logo" class="w-full h-full object-contain">
-            </a>
-            
-            <!-- Spotify -->
-            <a href="https://open.spotify.com/user/sl7hqmr01yynoac5eyqnzjntq?si=5d13a6c448fd44d9&nd=1&dlsi=173756328d9b4c43" target="_blank" title="Spotify" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#1DB954] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.567 17.316c-.218.358-.679.473-1.037.255-2.844-1.737-6.425-2.131-10.637-1.168-.403.093-.801-.167-.894-.57-.093-.403.167-.801.57-.894 4.544-1.049 8.524-.61 11.745 1.354.358.218.473.679.253 1.033zm1.488-3.308c-.274.444-.863.585-1.307.311-3.268-2.008-8.252-2.593-12.112-1.42-.511.155-1.054-.131-1.209-.642-.155-.511.131-1.054.642-1.209 4.316-1.31 9.805-.664 13.593 1.662.444.274.585.863.311 1.302-.001-.004-.002-.004-.002 0zm.127-3.468c-3.918-2.325-10.38-2.541-14.129-1.396-.605.184-1.252-.153-1.436-.758-.184-.605.153-1.252.758-1.436 4.194-1.275 11.332-1.026 15.828 1.691.547.324.729 1.035.405 1.582-.324.547-1.035.729-1.582.405-.001.001-.002.001-.004-.003z"/></svg>
-            </a>
-            
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/setyawan-dwi-rachmadhan-1886a024b/" target="_blank" title="LinkedIn" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#0a66c2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            
-            <!-- Discord -->
-            <a href="https://discord.com/users/467887336630255626" target="_blank" title="Discord" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#5865F2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            </a>
+            <!-- 2. photos -->
+            <div onclick="openPhotosWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    📸
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">photos</span>
+            </div>
+
+            <!-- 3. sketch -->
+            <div onclick="openSketchWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    ✏️
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">sketch</span>
+            </div>
+
+            <!-- 4. next level sketch -->
+            <div onclick="openNextLevelSketchWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    🎨
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide text-center">next level sketch</span>
+            </div>
+
+            <!-- 5. resume -->
+            <div onclick="openResumeWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    📄
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">resume</span>
+            </div>
+
+            <!-- 6. myself -->
+            <div onclick="openMyselfWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    👤
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">myself</span>
+            </div>
+
+            <!-- 7. sticky note (Canvas Drawing) -->
+            <div onclick="openStickyWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    📝
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">sticky note</span>
+            </div>
+
+            <!-- 8. notebook (Apple Notes App) -->
+            <div onclick="openNotebookApp()" class="desktop-item flex flex-col items-center cursor-pointer group">
+                <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
+                    📓
+                </div>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">notebook</span>
+            </div>
 
         </div>
-        <div class="text-[10px] text-gray-800 mt-2 font-bold tracking-wider">© 2026 SETYAWAN DWI RACHMADHAN</div>
-    </footer>
 
-    <!-- MODAL / JENDELA POP-UP GENERAL -->
-    <div id="app-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[450px] bg-slate-900/90 border border-white/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col text-white transition-all">
-            <div class="px-4 py-3 bg-white/10 flex justify-between items-center border-b border-white/10">
-                <span id="modal-title" class="text-xs font-bold tracking-wider">Title</span>
-                <button onclick="closeWindow()" class="text-gray-400 hover:text-white text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div id="modal-body" class="p-6 text-sm text-gray-300">
-                Konten jendela...
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS VIDEOS (MASONRY) -->
-    <div id="videos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Videos</span>
-                <button onclick="closeVideosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Video Library</h1>
-                <div id="video-loading" class="text-xs text-gray-500 italic py-4">Memuat media video...</div>
-                <div id="video-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS PHOTOS (MASONRY) -->
-    <div id="photos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Photos</span>
-                <button onclick="closePhotosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Library</h1>
-                <div id="photo-loading" class="text-xs text-gray-500 italic py-4">Memuat media foto...</div>
-                <div id="photo-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL KHUSUS SKETCH (MASONRY) -->
-    <div id="sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Sketch</span>
-                <button onclick="closeSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Sketch Library</h1>
-                <div id="sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media sketch...</div>
-                <div id="sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NEXT LEVEL SKETCH (MASONRY & FADE TRANSITION) -->
-    <div id="next-level-sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Next Level Sketch</span>
-                <button onclick="closeNextLevelSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-1">Next Level Sketch Library</h1>
-                <p class="text-xs text-gray-500 mb-4">Menampilkan transisi fade berkelanjutan antara folder before & after.</p>
-                <div id="next-level-sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media next level sketch...</div>
-                <div id="next-level-sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NOTEBOOK (APPLE NOTES STYLE TRANSPARAN/GLASS) -->
-    <div id="notebook-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[520px] glass-panel rounded-xl shadow-2xl overflow-hidden flex text-slate-800 border border-white/30">
-            <!-- Sidebar Apple Notes -->
-            <div class="w-64 glass-panel border-r border-white/20 flex flex-col">
-                <div class="p-3 border-b border-white/20 flex items-center justify-between">
-                    <span class="text-xs font-bold text-gray-900 tracking-wider">📓 notebook</span>
-                </div>
-                <div id="notes-sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-                    <!-- Dimuat dinamis -->
-                </div>
-            </div>
-            <!-- Main Content Apple Notes -->
-            <div class="flex-1 flex flex-col glass-panel">
-                <div class="p-3 border-b border-white/20 flex justify-between items-center">
-                    <span id="note-file-indicator" class="text-xs text-gray-700 font-semibold">notebook/note (1).txt</span>
-                    <button onclick="closeNotebookApp()" class="text-gray-600 hover:text-black text-base font-bold px-2 cursor-pointer">✕</button>
-                </div>
-                <div id="note-content-area" class="flex-1 p-6 overflow-y-auto notes-text-content custom-scrollbar">
-                    <!-- Isi note (1).txt -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS MYSELF -->
-    <div id="myself-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[950px] h-[650px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Myself</span>
-                <button onclick="closeMyselfWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            
-            <div class="flex-1 p-8 overflow-y-auto space-y-8">
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">reading</h2>
-                    <div class="grid grid-cols-3 gap-6">
-                        <a href="https://en.wikipedia.org/wiki/Animal_Farm" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Animal_Farm_-_1st_edition.jpg/250px-Animal_Farm_-_1st_edition.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Animal Farm</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Sherlock_Holmes" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://books.google.co.id/books/publisher/content?id=Zro8DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73J3S5FMWF0_IsnPpcKr1rbT3I8HQCH07ntqGFoSE6lQLjFCJM6jHM1RZinjR05F5czLVHE5bHUE3Y8rU29ymIaRtw_7xiCv-8gaeilvqYGVAlDXfN-Xd6N7g49FaNQfJyxznAw" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Sherlock Holmes</span>
-                            <span class="text-[10px] text-gray-500">Arthur Conan Doyle</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Nineteen_Eighty-Four" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/1984_first_edition_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail_unscaled">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">1984</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">watching</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://www.imdb.com/title/tt0944947/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BN2IzYzBiOTQtNGZmMi00NDI5LTgxMzMtN2EzZjA1NjhlOGMxXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Game of Thrones</span>
-                            <span class="text-[10px] text-gray-500">Series · HBO</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0816692/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg" alt="Interstellar" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Interstellar</span>
-                            <span class="text-[10px] text-gray-500">Film · 2014</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0108052/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX1000_.jpg" alt="Schindler's List" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Schindler's List</span>
-                            <span class="text-[10px] text-gray-500">Film · 1993</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt5311514/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/0/0b/Your_Name_poster.png/250px-Your_Name_poster.png?utm_source=id.wikipedia.org&utm_campaign=parser&utm_content=thumbnail" alt="Kimi no Na wa" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Kimi no Na wa</span>
-                            <span class="text-[10px] text-gray-500">Anime · 2016</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">listening</h2>
-                    <div class="grid grid-cols-5 gap-4">
-                        <a href="https://open.spotify.com/track/6GJkTafGBMmVodQitSW0JR?si=4cd9b119473341e1" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQPjmjXWevzXO8QCW8fSrfQyULdhdKmHvaEs5MxYmFA&s=10" alt="Photographic Memory" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Photographic Memory</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">In Inertia</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/4hoSmqq5aTBBjIQplnD0CX?si=54a14028fda3452e" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fd8f8c601a320bae3ca37d85fffb41a1f.1000x1000x1.png" alt="Yesterday" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Yesterday</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Zander Reese</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2jNiA1BR6Je4ZAPcOsOI3h?si=2a2a6521d0e44530" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT-_2J4hyG4KyV-x9G7VUHBno387W5JaACtYB8U7GHdor6fvnM8QZ8ZQk&s" alt="Halo" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Halo</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Starset</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2g7n0uQwR9vJGRLNTCSNbU?si=444199c02872442c" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Y1KA1qlNY4n04UCwJVjSynLYQNQZ8Ku6X5zZyfz2hA&s=10" alt="Surabaya" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Surabaya</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Crayon Case</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2pOLzpYmuDlcbTJUXYkPSr?si=533284da66784802" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fb495b044efe6bebe2c755e9164a3fa5d.1000x1000x1.png" alt="33x" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">33x</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Perunggu</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">playing</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://store.steampowered.com/app/1245620/Elden_Ring/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg" alt="Elden Ring" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Elden Ring</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg" alt="Red Dead Redemption 2" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">RDR 2</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/367520/Hollow_Knight/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg" alt="Hollow Knight" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Hollow Knight</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/413150/Stardew_Valley/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg" alt="Stardew Valley" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Stardew Valley</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div class="pt-2 pb-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <div class="space-y-3">
-                        <h3 class="text-xs tracking-widest text-gray-400 font-bold uppercase">got a suggestion?</h3>
-                        <div class="flex items-center space-x-2">
-                            <input type="text" id="suggestion-input" placeholder="a book, show, artist, or article..." class="flex-1 bg-white border border-gray-300 px-3 py-2 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-gray-400 shadow-sm">
-                            <button onclick="addSuggestion()" class="bg-[#222222] hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer">add</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center text-xs">
-                            <div class="space-x-3">
-                                <button onclick="switchTab('suggestions')" id="tab-suggestions" class="font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer">community suggestions (<span id="count-suggestions">4</span>)</button>
-                                <button onclick="switchTab('archive')" id="tab-archive" class="text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer">archive (<span id="count-archive">0</span>)</button>
-                            </div>
-                        </div>
-
-                        <div id="suggestion-list-container" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tower of god</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">In order to live by Yeonmi Park</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tswift</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">the bear</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- DOCK / TASKBAR SOSIAL MEDIA DI BAGIAN BAWAH -->
-    <footer class="w-full flex flex-col items-center pb-2 z-10">
-        <div class="glass-panel px-3 py-2 rounded-2xl shadow-2xl flex items-center space-x-3">
-            
-            <!-- Instagram 1 -->
-            <a href="https://www.instagram.com/setyawandr_" target="_blank" title="Instagram Utama" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- Instagram 2 -->
-            <a href="https://www.instagram.com/just.shift_" target="_blank" title="Instagram Kedua" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.262-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- GitHub -->
-            <a href="https://github.com/SetyawanDR" target="_blank" title="GitHub" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#24292e] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
-            
-            <!-- Steam -->
-            <a href="https://steamcommunity.com/id/zxsty1_" target="_blank" title="Steam" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#171a21] p-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/250px-Steam_icon_logo.svg.png" alt="Steam Logo" class="w-full h-full object-contain">
-            </a>
-            
-            <!-- Spotify -->
-            <a href="https://open.spotify.com/user/sl7hqmr01yynoac5eyqnzjntq?si=5d13a6c448fd44d9&nd=1&dlsi=173756328d9b4c43" target="_blank" title="Spotify" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#1DB954] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.567 17.316c-.218.358-.679.473-1.037.255-2.844-1.737-6.425-2.131-10.637-1.168-.403.093-.801-.167-.894-.57-.093-.403.167-.801.57-.894 4.544-1.049 8.524-.61 11.745 1.354.358.218.473.679.253 1.033zm1.488-3.308c-.274.444-.863.585-1.307.311-3.268-2.008-8.252-2.593-12.112-1.42-.511.155-1.054-.131-1.209-.642-.155-.511.131-1.054.642-1.209 4.316-1.31 9.805-.664 13.593 1.662.444.274.585.863.311 1.302-.001-.004-.002-.004-.002 0zm.127-3.468c-3.918-2.325-10.38-2.541-14.129-1.396-.605.184-1.252-.153-1.436-.758-.184-.605.153-1.252.758-1.436 4.194-1.275 11.332-1.026 15.828 1.691.547.324.729 1.035.405 1.582-.324.547-1.035.729-1.582.405-.001.001-.002.001-.004-.003z"/></svg>
-            </a>
-            
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/setyawan-dwi-rachmadhan-1886a024b/" target="_blank" title="LinkedIn" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#0a66c2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            
-            <!-- Discord -->
-            <a href="https://discord.com/users/467887336630255626" target="_blank" title="Discord" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#5865F2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            </a>
-
-        </div>
-        <div class="text-[10px] text-gray-800 mt-2 font-bold tracking-wider">© 2026 SETYAWAN DWI RACHMADHAN</div>
-    </footer>
-
-    <!-- MODAL / JENDELA POP-UP GENERAL -->
-    <div id="app-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[450px] bg-slate-900/90 border border-white/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col text-white transition-all">
-            <div class="px-4 py-3 bg-white/10 flex justify-between items-center border-b border-white/10">
-                <span id="modal-title" class="text-xs font-bold tracking-wider">Title</span>
-                <button onclick="closeWindow()" class="text-gray-400 hover:text-white text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div id="modal-body" class="p-6 text-sm text-gray-300">
-                Konten jendela...
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS VIDEOS (MASONRY) -->
-    <div id="videos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Videos</span>
-                <button onclick="closeVideosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Video Library</h1>
-                <div id="video-loading" class="text-xs text-gray-500 italic py-4">Memuat media video...</div>
-                <div id="video-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS PHOTOS (MASONRY) -->
-    <div id="photos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Photos</span>
-                <button onclick="closePhotosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Library</h1>
-                <div id="photo-loading" class="text-xs text-gray-500 italic py-4">Memuat media foto...</div>
-                <div id="photo-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL KHUSUS SKETCH (MASONRY) -->
-    <div id="sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Sketch</span>
-                <button onclick="closeSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Sketch Library</h1>
-                <div id="sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media sketch...</div>
-                <div id="sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NEXT LEVEL SKETCH (MASONRY & FADE TRANSITION) -->
-    <div id="next-level-sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Next Level Sketch</span>
-                <button onclick="closeNextLevelSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-1">Next Level Sketch Library</h1>
-                <p class="text-xs text-gray-500 mb-4">Menampilkan transisi fade berkelanjutan antara folder before & after.</p>
-                <div id="next-level-sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media next level sketch...</div>
-                <div id="next-level-sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NOTEBOOK (APPLE NOTES STYLE TRANSPARAN/GLASS) -->
-    <div id="notebook-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[520px] glass-panel rounded-xl shadow-2xl overflow-hidden flex text-slate-800 border border-white/30">
-            <!-- Sidebar Apple Notes -->
-            <div class="w-64 glass-panel border-r border-white/20 flex flex-col">
-                <div class="p-3 border-b border-white/20 flex items-center justify-between">
-                    <span class="text-xs font-bold text-gray-900 tracking-wider">📓 notebook</span>
-                </div>
-                <div id="notes-sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-                    <!-- Dimuat dinamis -->
-                </div>
-            </div>
-            <!-- Main Content Apple Notes -->
-            <div class="flex-1 flex flex-col glass-panel">
-                <div class="p-3 border-b border-white/20 flex justify-between items-center">
-                    <span id="note-file-indicator" class="text-xs text-gray-700 font-semibold">notebook/note (1).txt</span>
-                    <button onclick="closeNotebookApp()" class="text-gray-600 hover:text-black text-base font-bold px-2 cursor-pointer">✕</button>
-                </div>
-                <div id="note-content-area" class="flex-1 p-6 overflow-y-auto notes-text-content custom-scrollbar">
-                    <!-- Isi note (1).txt -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS MYSELF -->
-    <div id="myself-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[950px] h-[650px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Myself</span>
-                <button onclick="closeMyselfWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            
-            <div class="flex-1 p-8 overflow-y-auto space-y-8">
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">reading</h2>
-                    <div class="grid grid-cols-3 gap-6">
-                        <a href="https://en.wikipedia.org/wiki/Animal_Farm" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Animal_Farm_-_1st_edition.jpg/250px-Animal_Farm_-_1st_edition.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Animal Farm</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Sherlock_Holmes" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://books.google.co.id/books/publisher/content?id=Zro8DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73J3S5FMWF0_IsnPpcKr1rbT3I8HQCH07ntqGFoSE6lQLjFCJM6jHM1RZinjR05F5czLVHE5bHUE3Y8rU29ymIaRtw_7xiCv-8gaeilvqYGVAlDXfN-Xd6N7g49FaNQfJyxznAw" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Sherlock Holmes</span>
-                            <span class="text-[10px] text-gray-500">Arthur Conan Doyle</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Nineteen_Eighty-Four" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/1984_first_edition_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail_unscaled">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">1984</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">watching</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://www.imdb.com/title/tt0944947/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BN2IzYzBiOTQtNGZmMi00NDI5LTgxMzMtN2EzZjA1NjhlOGMxXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Game of Thrones</span>
-                            <span class="text-[10px] text-gray-500">Series · HBO</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0816692/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg" alt="Interstellar" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Interstellar</span>
-                            <span class="text-[10px] text-gray-500">Film · 2014</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0108052/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX1000_.jpg" alt="Schindler's List" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Schindler's List</span>
-                            <span class="text-[10px] text-gray-500">Film · 1993</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt5311514/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/0/0b/Your_Name_poster.png/250px-Your_Name_poster.png?utm_source=id.wikipedia.org&utm_campaign=parser&utm_content=thumbnail" alt="Kimi no Na wa" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Kimi no Na wa</span>
-                            <span class="text-[10px] text-gray-500">Anime · 2016</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">listening</h2>
-                    <div class="grid grid-cols-5 gap-4">
-                        <a href="https://open.spotify.com/track/6GJkTafGBMmVodQitSW0JR?si=4cd9b119473341e1" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQPjmjXWevzXO8QCW8fSrfQyULdhdKmHvaEs5MxYmFA&s=10" alt="Photographic Memory" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Photographic Memory</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">In Inertia</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/4hoSmqq5aTBBjIQplnD0CX?si=54a14028fda3452e" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fd8f8c601a320bae3ca37d85fffb41a1f.1000x1000x1.png" alt="Yesterday" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Yesterday</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Zander Reese</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2jNiA1BR6Je4ZAPcOsOI3h?si=2a2a6521d0e44530" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT-_2J4hyG4KyV-x9G7VUHBno387W5JaACtYB8U7GHdor6fvnM8QZ8ZQk&s" alt="Halo" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Halo</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Starset</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2g7n0uQwR9vJGRLNTCSNbU?si=444199c02872442c" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Y1KA1qlNY4n04UCwJVjSynLYQNQZ8Ku6X5zZyfz2hA&s=10" alt="Surabaya" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Surabaya</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Crayon Case</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2pOLzpYmuDlcbTJUXYkPSr?si=533284da66784802" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fb495b044efe6bebe2c755e9164a3fa5d.1000x1000x1.png" alt="33x" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">33x</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Perunggu</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">playing</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://store.steampowered.com/app/1245620/Elden_Ring/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg" alt="Elden Ring" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Elden Ring</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg" alt="Red Dead Redemption 2" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">RDR 2</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/367520/Hollow_Knight/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg" alt="Hollow Knight" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Hollow Knight</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/413150/Stardew_Valley/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg" alt="Stardew Valley" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Stardew Valley</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div class="pt-2 pb-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <div class="space-y-3">
-                        <h3 class="text-xs tracking-widest text-gray-400 font-bold uppercase">got a suggestion?</h3>
-                        <div class="flex items-center space-x-2">
-                            <input type="text" id="suggestion-input" placeholder="a book, show, artist, or article..." class="flex-1 bg-white border border-gray-300 px-3 py-2 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-gray-400 shadow-sm">
-                            <button onclick="addSuggestion()" class="bg-[#222222] hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer">add</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center text-xs">
-                            <div class="space-x-3">
-                                <button onclick="switchTab('suggestions')" id="tab-suggestions" class="font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer">community suggestions (<span id="count-suggestions">4</span>)</button>
-                                <button onclick="switchTab('archive')" id="tab-archive" class="text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer">archive (<span id="count-archive">0</span>)</button>
-                            </div>
-                        </div>
-
-                        <div id="suggestion-list-container" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tower of god</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">In order to live by Yeonmi Park</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tswift</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">the bear</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- DOCK / TASKBAR SOSIAL MEDIA DI BAGIAN BAWAH -->
-    <footer class="w-full flex flex-col items-center pb-2 z-10">
-        <div class="glass-panel px-3 py-2 rounded-2xl shadow-2xl flex items-center space-x-3">
-            
-            <!-- Instagram 1 -->
-            <a href="https://www.instagram.com/setyawandr_" target="_blank" title="Instagram Utama" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- Instagram 2 -->
-            <a href="https://www.instagram.com/just.shift_" target="_blank" title="Instagram Kedua" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.262-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            
-            <!-- GitHub -->
-            <a href="https://github.com/SetyawanDR" target="_blank" title="GitHub" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#24292e] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
-            
-            <!-- Steam -->
-            <a href="https://steamcommunity.com/id/zxsty1_" target="_blank" title="Steam" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#171a21] p-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/250px-Steam_icon_logo.svg.png" alt="Steam Logo" class="w-full h-full object-contain">
-            </a>
-            
-            <!-- Spotify -->
-            <a href="https://open.spotify.com/user/sl7hqmr01yynoac5eyqnzjntq?si=5d13a6c448fd44d9&nd=1&dlsi=173756328d9b4c43" target="_blank" title="Spotify" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#1DB954] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.567 17.316c-.218.358-.679.473-1.037.255-2.844-1.737-6.425-2.131-10.637-1.168-.403.093-.801-.167-.894-.57-.093-.403.167-.801.57-.894 4.544-1.049 8.524-.61 11.745 1.354.358.218.473.679.253 1.033zm1.488-3.308c-.274.444-.863.585-1.307.311-3.268-2.008-8.252-2.593-12.112-1.42-.511.155-1.054-.131-1.209-.642-.155-.511.131-1.054.642-1.209 4.316-1.31 9.805-.664 13.593 1.662.444.274.585.863.311 1.302-.001-.004-.002-.004-.002 0zm.127-3.468c-3.918-2.325-10.38-2.541-14.129-1.396-.605.184-1.252-.153-1.436-.758-.184-.605.153-1.252.758-1.436 4.194-1.275 11.332-1.026 15.828 1.691.547.324.729 1.035.405 1.582-.324.547-1.035.729-1.582.405-.001.001-.002.001-.004-.003z"/></svg>
-            </a>
-            
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/setyawan-dwi-rachmadhan-1886a024b/" target="_blank" title="LinkedIn" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#0a66c2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            
-            <!-- Discord -->
-            <a href="https://discord.com/users/467887336630255626" target="_blank" title="Discord" class="dock-icon w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#5865F2] p-2">
-                <svg class="w-full h-full fill-white" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            </a>
-
-        </div>
-        <div class="text-[10px] text-gray-800 mt-2 font-bold tracking-wider">© 2026 SETYAWAN DWI RACHMADHAN</div>
-    </footer>
-
-    <!-- MODAL / JENDELA POP-UP GENERAL -->
-    <div id="app-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[450px] bg-slate-900/90 border border-white/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col text-white transition-all">
-            <div class="px-4 py-3 bg-white/10 flex justify-between items-center border-b border-white/10">
-                <span id="modal-title" class="text-xs font-bold tracking-wider">Title</span>
-                <button onclick="closeWindow()" class="text-gray-400 hover:text-white text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div id="modal-body" class="p-6 text-sm text-gray-300">
-                Konten jendela...
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS VIDEOS (MASONRY) -->
-    <div id="videos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Videos</span>
-                <button onclick="closeVideosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Video Library</h1>
-                <div id="video-loading" class="text-xs text-gray-500 italic py-4">Memuat media video...</div>
-                <div id="video-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS PHOTOS (MASONRY) -->
-    <div id="photos-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Photos</span>
-                <button onclick="closePhotosWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Library</h1>
-                <div id="photo-loading" class="text-xs text-gray-500 italic py-4">Memuat media foto...</div>
-                <div id="photo-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL KHUSUS SKETCH (MASONRY) -->
-    <div id="sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Sketch</span>
-                <button onclick="closeSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-4">Sketch Library</h1>
-                <div id="sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media sketch...</div>
-                <div id="sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NEXT LEVEL SKETCH (MASONRY & FADE TRANSITION) -->
-    <div id="next-level-sketch-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Next Level Sketch</span>
-                <button onclick="closeNextLevelSketchWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar relative">
-                <h1 class="text-2xl font-bold text-black mb-1">Next Level Sketch Library</h1>
-                <p class="text-xs text-gray-500 mb-4">Menampilkan transisi fade berkelanjutan antara folder before & after.</p>
-                <div id="next-level-sketch-loading" class="text-xs text-gray-500 italic py-4">Memuat media next level sketch...</div>
-                <div id="next-level-sketch-grid" class="masonry-grid pb-8"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS NOTEBOOK (APPLE NOTES STYLE TRANSPARAN/GLASS) -->
-    <div id="notebook-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[850px] h-[520px] glass-panel rounded-xl shadow-2xl overflow-hidden flex text-slate-800 border border-white/30">
-            <!-- Sidebar Apple Notes -->
-            <div class="w-64 glass-panel border-r border-white/20 flex flex-col">
-                <div class="p-3 border-b border-white/20 flex items-center justify-between">
-                    <span class="text-xs font-bold text-gray-900 tracking-wider">📓 notebook</span>
-                </div>
-                <div id="notes-sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-                    <!-- Dimuat dinamis -->
-                </div>
-            </div>
-            <!-- Main Content Apple Notes -->
-            <div class="flex-1 flex flex-col glass-panel">
-                <div class="p-3 border-b border-white/20 flex justify-between items-center">
-                    <span id="note-file-indicator" class="text-xs text-gray-700 font-semibold">notebook/note (1).txt</span>
-                    <button onclick="closeNotebookApp()" class="text-gray-600 hover:text-black text-base font-bold px-2 cursor-pointer">✕</button>
-                </div>
-                <div id="note-content-area" class="flex-1 p-6 overflow-y-auto notes-text-content custom-scrollbar">
-                    <!-- Isi note (1).txt -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL KHUSUS MYSELF -->
-    <div id="myself-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-[950px] h-[650px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
-            <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300">
-                <span class="text-xs font-semibold text-gray-700">Myself</span>
-                <button onclick="closeMyselfWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
-            </div>
-            
-            <div class="flex-1 p-8 overflow-y-auto space-y-8">
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">reading</h2>
-                    <div class="grid grid-cols-3 gap-6">
-                        <a href="https://en.wikipedia.org/wiki/Animal_Farm" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Animal_Farm_-_1st_edition.jpg/250px-Animal_Farm_-_1st_edition.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Animal Farm</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Sherlock_Holmes" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://books.google.co.id/books/publisher/content?id=Zro8DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE73J3S5FMWF0_IsnPpcKr1rbT3I8HQCH07ntqGFoSE6lQLjFCJM6jHM1RZinjR05F5czLVHE5bHUE3Y8rU29ymIaRtw_7xiCv-8gaeilvqYGVAlDXfN-Xd6N7g49FaNQfJyxznAw" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Sherlock Holmes</span>
-                            <span class="text-[10px] text-gray-500">Arthur Conan Doyle</span>
-                        </a>
-                        <a href="https://en.wikipedia.org/wiki/Nineteen_Eighty-Four" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/1984_first_edition_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail_unscaled">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">1984</span>
-                            <span class="text-[10px] text-gray-500">George Orwell</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">watching</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://www.imdb.com/title/tt0944947/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BN2IzYzBiOTQtNGZmMi00NDI5LTgxMzMtN2EzZjA1NjhlOGMxXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg" alt="Game of Thrones" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Game of Thrones</span>
-                            <span class="text-[10px] text-gray-500">Series · HBO</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0816692/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg" alt="Interstellar" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Interstellar</span>
-                            <span class="text-[10px] text-gray-500">Film · 2014</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt0108052/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX1000_.jpg" alt="Schindler's List" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Schindler's List</span>
-                            <span class="text-[10px] text-gray-500">Film · 1993</span>
-                        </a>
-                        <a href="https://www.imdb.com/title/tt5311514/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/0/0b/Your_Name_poster.png/250px-Your_Name_poster.png?utm_source=id.wikipedia.org&utm_campaign=parser&utm_content=thumbnail" alt="Kimi no Na wa" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Kimi no Na wa</span>
-                            <span class="text-[10px] text-gray-500">Anime · 2016</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">listening</h2>
-                    <div class="grid grid-cols-5 gap-4">
-                        <a href="https://open.spotify.com/track/6GJkTafGBMmVodQitSW0JR?si=4cd9b119473341e1" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQPjmjXWevzXO8QCW8fSrfQyULdhdKmHvaEs5MxYmFA&s=10" alt="Photographic Memory" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Photographic Memory</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">In Inertia</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/4hoSmqq5aTBBjIQplnD0CX?si=54a14028fda3452e" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fd8f8c601a320bae3ca37d85fffb41a1f.1000x1000x1.png" alt="Yesterday" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Yesterday</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Zander Reese</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2jNiA1BR6Je4ZAPcOsOI3h?si=2a2a6521d0e44530" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT-_2J4hyG4KyV-x9G7VUHBno387W5JaACtYB8U7GHdor6fvnM8QZ8ZQk&s" alt="Halo" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Halo</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Starset</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2g7n0uQwR9vJGRLNTCSNbU?si=444199c02872442c" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Y1KA1qlNY4n04UCwJVjSynLYQNQZ8Ku6X5zZyfz2hA&s=10" alt="Surabaya" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">Surabaya</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Crayon Case</span>
-                        </a>
-                        <a href="https://open.spotify.com/track/2pOLzpYmuDlcbTJUXYkPSr?si=533284da66784802" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2Fb495b044efe6bebe2c755e9164a3fa5d.1000x1000x1.png" alt="33x" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-800 text-center truncate w-full">33x</span>
-                            <span class="text-[9px] text-gray-500 truncate w-full text-center">Perunggu</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div>
-                    <h2 class="text-xs tracking-widest text-gray-400 font-bold mb-4 uppercase">playing</h2>
-                    <div class="grid grid-cols-4 gap-6">
-                        <a href="https://store.steampowered.com/app/1245620/Elden_Ring/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg" alt="Elden Ring" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Elden Ring</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg" alt="Red Dead Redemption 2" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">RDR 2</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/367520/Hollow_Knight/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg" alt="Hollow Knight" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Hollow Knight</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                        <a href="https://store.steampowered.com/app/413150/Stardew_Valley/" target="_blank" class="group flex flex-col items-center bg-white/60 p-3 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div class="w-28 h-36 bg-gray-200 rounded-lg overflow-hidden shadow mb-2 flex items-center justify-center group-hover:scale-105 transition">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/library_600x900.jpg" alt="Stardew Valley" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 text-center">Stardew Valley</span>
-                            <span class="text-[10px] text-gray-500">Steam</span>
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="border-gray-300">
-
-                <div class="pt-2 pb-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <div class="space-y-3">
-                        <h3 class="text-xs tracking-widest text-gray-400 font-bold uppercase">got a suggestion?</h3>
-                        <div class="flex items-center space-x-2">
-                            <input type="text" id="suggestion-input" placeholder="a book, show, artist, or article..." class="flex-1 bg-white border border-gray-300 px-3 py-2 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-gray-400 shadow-sm">
-                            <button onclick="addSuggestion()" class="bg-[#222222] hover:bg-black text-white px-5 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer">add</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center text-xs">
-                            <div class="space-x-3">
-                                <button onclick="switchTab('suggestions')" id="tab-suggestions" class="font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer">community suggestions (<span id="count-suggestions">4</span>)</button>
-                                <button onclick="switchTab('archive')" id="tab-archive" class="text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer">archive (<span id="count-archive">0</span>)</button>
-                            </div>
-                        </div>
-
-                        <div id="suggestion-list-container" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tower of god</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">In order to live by Yeonmi Park</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tswift</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">the bear</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 
     <!-- DOCK / TASKBAR SOSIAL MEDIA DI BAGIAN BAWAH -->
@@ -2042,4 +1055,371 @@
 
         function addSuggestion() {
             const input = document.getElementById('suggestion-input');
-            const val = input.value.Saya tidak diprogram untuk itu. Saya hanya menghasilkan teks.
+            const val = input.value.trim();
+            if(val !== "") {
+                communitySuggestions.unshift(val);
+                input.value = "";
+                renderSuggestions();
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const tabS = document.getElementById('tab-suggestions');
+            const tabA = document.getElementById('tab-archive');
+
+            if(tab === 'suggestions') {
+                tabS.className = "font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer";
+                tabA.className = "text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer";
+            } else {
+                tabA.className = "font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer";
+                tabS.className = "text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer";
+            }
+            renderSuggestions();
+        }
+
+        function renderSuggestions() {
+            const container = document.getElementById('suggestion-list-container');
+            document.getElementById('count-suggestions').innerText = communitySuggestions.length;
+            document.getElementById('count-archive').innerText = archiveSuggestions.length;
+
+            container.innerHTML = "";
+            const activeList = currentTab === 'suggestions' ? communitySuggestions : archiveSuggestions;
+
+            if(activeList.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 text-xs py-4">Belum ada item di sini.</div>';
+                return;
+            }
+
+            activeList.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm flex justify-between items-center group";
+                div.innerHTML = `
+                    <span>${item}</span>
+                    <button onclick="moveItem(${index})" class="text-[10px] text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition cursor-pointer" title="Pindah tab">✕</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function moveItem(index) {
+            if(currentTab === 'suggestions') {
+                const item = communitySuggestions.splice(index, 1)[0];
+                archiveSuggestions.unshift(item);
+            } else {
+                const item = archiveSuggestions.splice(index, 1)[0];
+                communitySuggestions.unshift(item);
+            }
+            renderSuggestions();
+        }
+
+        let stickyNotesData = [
+            { name: "DANI", message: "HELLO", image: null, bg: "bg-[#c5dbcc]" },
+            { name: "NITYA", message: "HELLO", image: null, bg: "bg-[#b3cbd0]" },
+        ];
+
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let currentColor = '#2c2b29';
+
+        function openStickyWindow() {
+            document.getElementById('sticky-modal').classList.remove('hidden');
+            initCanvas();
+            renderWall();
+        }
+
+        function closeStickyWindow() {
+            document.getElementById('sticky-modal').classList.add('hidden');
+        }
+
+        function initCanvas() {
+            canvas = document.getElementById('sticky-canvas');
+            ctx = canvas.getContext('2d');
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            canvas.onmousedown = startDraw;
+            canvas.onmousemove = draw;
+            canvas.onmouseup = stopDraw;
+            canvas.onmouseleave = stopDraw;
+
+            canvas.ontouchstart = (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousedown', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                canvas.dispatchEvent(mouseEvent);
+            };
+
+            canvas.ontouchmove = (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousemove', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                canvas.dispatchEvent(mouseEvent);
+            };
+
+            canvas.ontouchend = (e) => {
+                e.preventDefault();
+                const mouseEvent = new MouseEvent('mouseup', {});
+                canvas.dispatchEvent(mouseEvent);
+            };
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            document.getElementById('canvas-placeholder').style.display = 'none';
+            ctx.beginPath();
+            const rect = canvas.getBoundingClientRect();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const size = document.getElementById('brush-size').value;
+
+            if (currentTool === 'pen') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = size;
+            } else if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = size * 3;
+            }
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDraw() { isDrawing = false; }
+        function setTool(tool) { currentTool = tool; }
+        function setColor(color) { currentColor = color; currentTool = 'pen'; }
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('canvas-placeholder').style.display = 'block';
+        }
+
+        function switchStickyTab(tab) {
+            const viewCreate = document.getElementById('view-create');
+            const viewWall = document.getElementById('view-wall');
+            if (tab === 'create') {
+                viewCreate.classList.remove('hidden');
+                viewWall.classList.add('hidden');
+            } else {
+                viewWall.classList.remove('hidden');
+                viewCreate.classList.add('hidden');
+                renderWall();
+            }
+        }
+
+        function postStickyNote() {
+            const author = document.getElementById('author-input').value.trim() || "ANON";
+            const message = document.getElementById('message-input').value.trim() || "HELLO";
+            const dataURL = canvas.toDataURL();
+            stickyNotesData.unshift({ name: author.toUpperCase(), message: message.toUpperCase(), image: dataURL, bg: "bg-[#c5dbcc]" });
+            clearCanvas();
+            switchStickyTab('wall');
+        }
+
+        function renderWall() {
+            const grid = document.getElementById('wall-grid');
+            document.getElementById('wall-count').innerText = stickyNotesData.length;
+            grid.innerHTML = "";
+            stickyNotesData.forEach(note => {
+                const card = document.createElement('div');
+                card.className = `${note.bg} p-5 rounded-xl shadow-sm flex flex-col justify-between h-72 border border-black/5 relative overflow-hidden`;
+                card.innerHTML = `<div class="flex-1 flex items-center justify-center overflow-hidden my-2"><img src="${note.image}" class="max-h-40 object-contain"></div><div class="mt-auto"><div class="text-xs font-bold">${note.name}</div><div class="text-[11px] font-semibold">${note.message}</div></div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function openMyselfWindow() { document.getElementById('myself-modal').classList.remove('hidden'); renderSuggestions(); }
+        function closeMyselfWindow() { document.getElementById('myself-modal').classList.add('hidden'); }
+        
+        function openPhotosWindow() { 
+            document.getElementById('photos-modal').classList.remove('hidden'); 
+            loadFolderWithLoading('photos', 'photo-grid', 'photo-loading'); 
+        }
+        function closePhotosWindow() { document.getElementById('photos-modal').classList.add('hidden'); }
+        
+        function openSketchWindow() { 
+            document.getElementById('sketch-modal').classList.remove('hidden'); 
+            loadFolderWithLoading('sketch', 'sketch-grid', 'sketch-loading'); 
+        }
+        function closeSketchWindow() { document.getElementById('sketch-modal').classList.add('hidden'); }
+
+        function loadFolderWithLoading(folderName, gridId, loadingId) {
+            const grid = document.getElementById(gridId);
+            const loading = document.getElementById(loadingId);
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+
+            let loadedCount = 0;
+            const totalItems = 100;
+
+            for (let i = 1; i <= totalItems; i++) {
+                const prefix = folderName === 'sketch' ? 'sketch' : 'foto';
+                const imgPath = `${folderName}/${prefix} (${i}).jpg`;
+                const item = document.createElement('div');
+                item.className = 'masonry-item bg-gray-200 rounded-lg overflow-hidden shadow cursor-pointer transform hover:scale-[1.02] transition relative group';
+                
+                const img = document.createElement('img');
+                img.className = 'w-full h-auto object-contain block';
+                img.src = imgPath;
+                
+                img.onload = () => {
+                    loadedCount++;
+                    if (loadedCount >= 15) { loading.style.display = 'none'; }
+                };
+                
+                img.onerror = () => {
+                    item.style.display = 'none';
+                    loadedCount++;
+                    if (loadedCount >= totalItems) { loading.style.display = 'none'; }
+                };
+
+                item.appendChild(img);
+                
+                const overlay = document.createElement('div');
+                overlay.className = 'absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold';
+                overlay.innerText = 'Buka';
+                item.appendChild(overlay);
+
+                item.onclick = () => openImageViewer(imgPath);
+                grid.appendChild(item);
+            }
+
+            setTimeout(() => { loading.style.display = 'none'; }, 2000);
+        }
+
+        function openNextLevelSketchWindow() {
+            document.getElementById('next-level-sketch-modal').classList.remove('hidden');
+            loadNextLevelSketchFolder();
+        }
+
+        function closeNextLevelSketchWindow() {
+            document.getElementById('next-level-sketch-modal').classList.add('hidden');
+        }
+
+        function loadNextLevelSketchFolder() {
+            const grid = document.getElementById('next-level-sketch-grid');
+            const loading = document.getElementById('next-level-sketch-loading');
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+
+            let loadedCount = 0;
+            const totalItems = 30;
+
+            for (let i = 1; i <= totalItems; i++) {
+                const beforePath = `next level sketch/before/before (${i}).jpg`;
+                const afterPath = `next level sketch/after/after (${i}).jpg`;
+                
+                const item = document.createElement('div');
+                item.className = 'masonry-item bg-gray-200 rounded-lg overflow-hidden shadow relative group cursor-pointer';
+                item.innerHTML = `
+                    <div class="w-full relative">
+                        <img src="${beforePath}" class="w-full h-auto object-contain block fade-img-before" onerror="this.closest('.masonry-item').style.display='none'">
+                        <img src="${afterPath}" class="w-full h-auto object-contain block absolute inset-0 fade-img-after" onerror="this.closest('.masonry-item').style.display='none'">
+                    </div>
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-semibold z-10">Buka Detail</div>
+                `;
+                item.onclick = () => openImageViewer(afterPath);
+                
+                setTimeout(() => {
+                    loadedCount++;
+                    if (loadedCount >= 5) { loading.style.display = 'none'; }
+                }, 400);
+
+                grid.appendChild(item);
+            }
+            setTimeout(() => { loading.style.display = 'none'; }, 2000);
+        }
+
+        function openImageViewer(src) {
+            document.getElementById('viewer-img').src = src;
+            document.getElementById('image-viewer-modal').classList.remove('hidden');
+        }
+        function closeImageViewer() {
+            document.getElementById('image-viewer-modal').classList.add('hidden');
+        }
+
+        function openVideosWindow() {
+            document.getElementById('videos-modal').classList.remove('hidden');
+            loadVideoFolder();
+        }
+        
+        function closeVideosWindow() {
+            document.getElementById('videos-modal').classList.add('hidden');
+        }
+
+        function loadVideoFolder() {
+            const grid = document.getElementById('video-grid');
+            const loading = document.getElementById('video-loading');
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+
+            let checkedCount = 0;
+            const totalVideos = 30;
+
+            for (let i = 1; i <= totalVideos; i++) { 
+                const videoPath = `videos/videos (${i}).mp4`;
+                const item = document.createElement('div');
+                item.className = 'masonry-item bg-gray-800 rounded-lg overflow-hidden shadow cursor-pointer transform hover:scale-[1.02] transition relative group flex items-center justify-center';
+                item.innerHTML = `
+                    <video src="${videoPath}" class="w-full h-auto object-contain block" preload="metadata" muted></video>
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-3xl">▶</div>
+                `;
+                item.style.display = 'none';
+                
+                const vidElem = item.querySelector('video');
+                vidElem.onloadedmetadata = () => {
+                    item.style.display = 'block';
+                    checkedCount++;
+                    if(checkedCount >= 5) { loading.style.display = 'none'; }
+                };
+                vidElem.onerror = () => {
+                    checkedCount++;
+                    if(checkedCount >= totalVideos) { loading.style.display = 'none'; }
+                };
+
+                item.onclick = () => openVideoViewer(videoPath);
+                grid.appendChild(item);
+            }
+            setTimeout(() => { loading.style.display = 'none'; }, 2500);
+        }
+
+        function openVideoViewer(src) {
+            const modal = document.getElementById('video-viewer-modal');
+            const videoViewer = document.getElementById('viewer-video');
+            videoViewer.src = src;
+            videoViewer.play().catch(e => console.log("Gagal auto-play: ", e));
+            modal.classList.remove('hidden');
+        }
+
+        function closeVideoViewer() {
+            document.getElementById('video-viewer-modal').classList.add('hidden');
+            const videoViewer = document.getElementById('viewer-video');
+            videoViewer.pause();
+            videoViewer.src = "";
+        }
+
+        function openResumeWindow() {
+            document.getElementById('resume-modal').classList.remove('hidden');
+        }
+        function closeResumeWindow() {
+            document.getElementById('resume-modal').classList.add('hidden');
+        }
+
+    </script>
+</body>
+</html>
