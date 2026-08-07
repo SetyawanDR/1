@@ -121,7 +121,7 @@
             animation: crossFadeAfter 6s infinite;
         }
 
-        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) SESUAI REQUEST */
+        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
@@ -136,6 +136,7 @@
                 width: 100% !important;
                 max-width: 350px !important;
                 margin: 0 auto 16px auto !important;
+                justify-content: flex-start !important; /* Geser tulisan nama agak ke kiri */
             }
             .flex-1.pt-2.relative {
                 position: relative !important;
@@ -146,7 +147,23 @@
                 padding: 0 !important;
                 gap: 16px !important;
             }
-            /* 8 Ikon Folder di Posisi Paling Atas (Grid 2 Kolom) */
+            /* Urutan Elemen di HP: Wallpaper -> Waktu -> 8 Ikon -> Musik */
+            .w-\[330px\] {
+                width: 100% !important;
+                max-width: 350px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 16px !important;
+            }
+            /* Wallpaper di urutan ke-1 (Paling Atas) */
+            .w-\[330px\] > div:nth-child(1) {
+                order: 1 !important;
+            }
+            /* Tanggal & Waktu di urutan ke-2 */
+            .w-\[330px\] > div:nth-child(2) {
+                order: 2 !important;
+            }
+            /* 8 Ikon Folder di urutan ke-3 */
             .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
@@ -158,38 +175,29 @@
                 width: 100% !important;
                 max-width: 350px !important;
                 justify-items: center !important;
-                margin-bottom: 8px !important;
-            }
-            /* Wrapper Widget Kanan Menyesuaikan Lebar HP & Urutan Sesuai Gambar */
-            .w-\[330px\] {
-                width: 100% !important;
-                max-width: 350px !important;
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 16px !important;
-            }
-            /* Wallpaper & Tanggal ditaruh di atas 8 widget ikon (Urutan ke-2 & ke-3) */
-            .w-\[330px\] > div:nth-child(1) {
-                order: 1 !important;
-            }
-            .w-\[330px\] > div:nth-child(2) {
-                order: 2 !important;
-            }
-            /* Musik ditaruh di bawah 8 widget ikon (Urutan ke-3) */
-            .w-\[330px\] > div:nth-child(3) {
                 order: 3 !important;
+            }
+            /* Musik (Now Playing) di urutan ke-4 (Di bawah 8 ikon) */
+            .w-\[330px\] > div:nth-child(3) {
+                order: 4 !important;
             }
             footer {
                 margin-top: 24px !important;
                 width: 100% !important;
             }
             footer .glass-panel {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
-                padding: 8px 12px;
-                max-width: 350px;
+                flex-wrap: nowrap !important; /* Paksa 1 baris saja */
+                justify-content: center !important;
+                gap: 6px !important;
+                padding: 8px 10px !important;
+                max-width: 350px !important;
                 margin: 0 auto;
+                overflow-x: auto; /* Bisa digeser horizontal halus jika layar sangat kecil */
+            }
+            footer .dock-icon {
+                width: 34px !important;
+                height: 34px !important;
+                flex-shrink: 0;
             }
         }
     </style>
