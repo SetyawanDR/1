@@ -121,22 +121,32 @@
             animation: crossFadeAfter 6s infinite;
         }
 
-        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) */
+        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) SESUAI REQUEST */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
                 height: auto !important;
                 min-height: 100vh;
                 padding: 16px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+            }
+            header {
+                width: 100% !important;
+                max-width: 350px !important;
+                margin: 0 auto 16px auto !important;
             }
             .flex-1.pt-2.relative {
                 position: relative !important;
+                display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
-                justify-content: flex-start !important;
-                gap: 24px;
-                padding-bottom: 80px;
+                width: 100% !important;
+                padding: 0 !important;
+                gap: 16px !important;
             }
+            /* 8 Ikon Folder di Posisi Paling Atas (Grid 2 Kolom) */
             .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
@@ -145,18 +155,41 @@
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 gap: 16px !important;
-                width: 100%;
-                justify-items: center;
+                width: 100% !important;
+                max-width: 350px !important;
+                justify-items: center !important;
+                margin-bottom: 8px !important;
             }
+            /* Wrapper Widget Kanan Menyesuaikan Lebar HP & Urutan Sesuai Gambar */
             .w-\[330px\] {
                 width: 100% !important;
-                max-width: 350px;
+                max-width: 350px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 16px !important;
+            }
+            /* Wallpaper & Tanggal ditaruh di atas 8 widget ikon (Urutan ke-2 & ke-3) */
+            .w-\[330px\] > div:nth-child(1) {
+                order: 1 !important;
+            }
+            .w-\[330px\] > div:nth-child(2) {
+                order: 2 !important;
+            }
+            /* Musik ditaruh di bawah 8 widget ikon (Urutan ke-3) */
+            .w-\[330px\] > div:nth-child(3) {
+                order: 3 !important;
+            }
+            footer {
+                margin-top: 24px !important;
+                width: 100% !important;
             }
             footer .glass-panel {
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 8px;
                 padding: 8px 12px;
+                max-width: 350px;
+                margin: 0 auto;
             }
         }
     </style>
