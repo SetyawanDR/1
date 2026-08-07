@@ -121,21 +121,21 @@
             animation: crossFadeAfter 6s infinite;
         }
 
-        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) DENGAN LEBAR KANAN-KIRI DIPERLEBAR */
+        /* CSS RESPONSIVE KHUSUS LAYAR HP (MOBILE) */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
                 height: auto !important;
                 min-height: 100vh;
-                padding: 10px !important; /* Padding diperkecil agar lebih melebar ke kanan-kiri */
+                padding: 12px !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: flex-start !important;
             }
             header {
                 width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 auto 12px auto !important;
+                max-width: 375px !important;
+                margin: 0 auto 14px auto !important;
                 justify-content: flex-start !important;
             }
             .flex-1.pt-2.relative {
@@ -145,15 +145,15 @@
                 align-items: center !important;
                 width: 100% !important;
                 padding: 0 !important;
-                gap: 12px !important;
+                gap: 14px !important;
             }
-            /* Kontainer Widget Kanan & Kiri dilebarkan hampir memenuhi layar */
+            /* Kontainer Elemen di HP dengan max-width disesuaikan sangat sedikit */
             .w-\[330px\] {
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 375px !important;
                 display: flex !important;
                 flex-direction: column !important;
-                gap: 12px !important;
+                gap: 14px !important;
             }
             /* 1. Wallpaper di urutan ke-1 */
             .w-\[330px\] > div:nth-child(1) {
@@ -163,7 +163,7 @@
             .w-\[330px\] > div:nth-child(2) {
                 order: 2 !important;
             }
-            /* 3. 8 Ikon Utama di urutan ke-3 (Grid 2 Kolom melebar) */
+            /* 3. 8 Ikon Utama di urutan ke-3 (Menggunakan flex/grid manual agar urutan flexbox konsisten) */
             .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
@@ -171,18 +171,18 @@
                 transform: none !important;
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 12px !important;
+                gap: 14px !important;
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 375px !important;
                 justify-items: center !important;
                 order: 3 !important;
             }
-            /* 4. Widget Musik (Now Playing) dipindah ke urutan ke-4 (Di bawah 8 ikon) */
+            /* 4. Widget Musik dipaksa persis di bawah 8 ikon utama (urutan ke-4) */
             .w-\[330px\] > div:nth-child(3) {
                 order: 4 !important;
             }
             footer {
-                margin-top: 16px !important;
+                margin-top: 20px !important;
                 width: 100% !important;
             }
             footer .glass-panel {
@@ -190,7 +190,7 @@
                 justify-content: center !important;
                 gap: 6px !important;
                 padding: 8px 10px !important;
-                max-width: 100% !important;
+                max-width: 375px !important;
                 margin: 0 auto;
                 overflow-x: auto;
             }
@@ -226,6 +226,98 @@
 
     <!-- MAIN CONTAINER (AREA DESKTOP & WIDGETS) -->
     <div class="flex justify-end items-start flex-1 pt-2 relative">
+
+        <!-- WIDGETS DI KANAN / TENGAH (DIV UTAMA) -->
+        <div class="w-[330px] flex flex-col space-y-4 z-10">
+
+            <!-- 1. WIDGET WALLPAPER -->
+            <div class="glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between">
+                <span class="text-[10px] tracking-widest text-gray-800 font-bold">WALLPAPER</span>
+                <div class="flex space-x-2">
+                    <button class="w-7 h-7 rounded-full bg-amber-200/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">☀️</button>
+                    <button class="w-7 h-7 rounded-full bg-emerald-700/80 border-2 border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌿</button>
+                    <button class="w-7 h-7 rounded-full bg-rose-300/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🏙️</button>
+                    <button class="w-7 h-7 rounded-full bg-slate-900/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌙</button>
+                </div>
+            </div>
+
+            <!-- 2. WIDGET WAKTU, TANGGAL, BULAN, & TAHUN -->
+            <div class="glass-panel p-4 rounded-2xl shadow-lg text-center">
+                <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-1">DATE & TIME</div>
+                <div id="live-time" class="text-2xl font-bold text-gray-900 tracking-wider">00:00:00</div>
+                <div id="live-date" class="text-xs text-gray-700 mt-1 font-semibold">Senin, 1 Januari 2026</div>
+            </div>
+
+            <!-- 3. WIDGET NOW PLAYING (POSISI DI BAWAH 8 IKON PADA TAMPILAN HP) -->
+            <div class="glass-panel p-4 rounded-2xl shadow-lg flex flex-col relative">
+                <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-3 uppercase">Now Playing</div>
+                
+                <div class="bg-[#48534f] rounded-xl p-3 flex flex-col text-white shadow-inner relative font-sans">
+                    <!-- Top Section: Art & Playlist -->
+                    <div class="flex h-[88px] mb-3 relative">
+                        <!-- Album Art Menggunakan cover.gif -->
+                        <div class="w-[88px] h-[88px] bg-gray-300 rounded-md overflow-hidden shrink-0 shadow">
+                            <img id="current-album-img" src="cover.gif" alt="Album Art" class="w-full h-full object-cover">
+                        </div>
+                        
+                        <!-- Playlist Tracks (Daftar Lagu) -->
+                        <div id="playlist-container" class="flex-1 ml-3 overflow-y-auto text-[11px] space-y-[7px] pr-8 custom-scrollbar">
+                            <!-- Dimuat via JavaScript -->
+                        </div>
+                        
+                        <!-- Spotify Logo Floating -->
+                        <div class="absolute top-0 right-0 text-white z-10 pointer-events-none">
+                            <svg class="w-[22px] h-[22px] fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.567 17.316c-.218.358-.679.473-1.037.255-2.844-1.737-6.425-2.131-10.637-1.168-.403.093-.801-.167-.894-.57-.093-.403.167-.801.57-.894 4.544-1.049 8.524-.61 11.745 1.354.358.218.473.679.253 1.033zm1.488-3.308c-.274.444-.863.585-1.307.311-3.268-2.008-8.252-2.593-12.112-1.42-.511.155-1.054-.131-1.209-.642-.155-.511.131-1.054.642-1.209 4.316-1.31 9.805-.664 13.593 1.662.444.274.585.863.311 1.302-.001-.004-.002-.004-.002 0zm.127-3.468c-3.918-2.325-10.38-2.541-14.129-1.396-.605.184-1.252-.153-1.436-.758-.184-.605.153-1.252.758-1.436 4.194-1.275 11.332-1.026 15.828 1.691.547.324.729 1.035.405 1.582-.324.547-1.035.729-1.582.405-.001.001-.002.001-.004-.003z"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- Title & Author Dinamis -->
+                    <div id="current-song-title" class="text-[12px] font-semibold mb-3 tracking-wide truncate">168 · Monita Tahalea</div>
+
+                    <!-- Controls Section -->
+                    <div class="flex items-center justify-between">
+                        <!-- Left Actions: Prev, Seek Slider, Next, Timer, Volume -->
+                        <div class="flex items-center space-x-[7px]">
+                            <button onclick="prevSong()" class="hover:text-gray-300 cursor-pointer">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                            </button>
+                            <!-- Seek Slider (Garis Antara Previous & Next) -->
+                            <input type="range" id="seek-slider" min="0" max="100" value="0" step="0.1" class="w-10 h-1 accent-white bg-gray-500 rounded-lg appearance-none cursor-pointer">
+                            <button onclick="nextSong()" class="hover:text-gray-300 cursor-pointer">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                            </button>
+                            
+                            <!-- Durasi Waktu Musik -->
+                            <span id="song-timer" class="text-[10px] font-medium text-gray-300">00:00</span>
+
+                            <!-- Volume Icon & Slider -->
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-4 h-4 fill-current text-gray-300 shrink-0" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" class="w-9 h-1 accent-white bg-gray-500 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Right Actions: More, Play -->
+                        <div class="flex items-center space-x-[9px]">
+                            <!-- More (...) button -->
+                            <button class="hover:text-gray-300 font-bold pb-2.5 text-lg tracking-[2px]">...</button>
+                            
+                            <!-- Main Play/Pause Button -->
+                            <button id="play-btn" onclick="togglePlay()" class="w-[34px] h-[34px] rounded-full bg-white text-[#48534f] flex items-center justify-center hover:scale-105 transition shadow-sm cursor-pointer">
+                                <svg id="play-icon" class="w-[18px] h-[18px] ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="pause-icon" class="w-[18px] h-[18px] hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tautan Open in Spotify -->
+                <a href="https://open.spotify.com/playlist/6ZJ9ruEkcWD1UNyFMQrEEo?si=8c84d91697ef42a7" target="_blank" class="mt-2.5 text-[11px] text-gray-800 hover:text-black tracking-wider flex items-center transition font-semibold w-max cursor-pointer">
+                    open in spotify &rarr;
+                </a>
+            </div>
+
+        </div>
 
         <!-- AREA 8 FOLDER DI TENGAH -->
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-6 z-10">
@@ -296,97 +388,6 @@
 
         </div>
 
-        <!-- WIDGETS DI KANAN -->
-        <div class="w-[330px] flex flex-col space-y-4 z-10">
-
-            <!-- 1. WIDGET WALLPAPER -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between">
-                <span class="text-[10px] tracking-widest text-gray-800 font-bold">WALLPAPER</span>
-                <div class="flex space-x-2">
-                    <button class="w-7 h-7 rounded-full bg-amber-200/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">☀️</button>
-                    <button class="w-7 h-7 rounded-full bg-emerald-700/80 border-2 border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌿</button>
-                    <button class="w-7 h-7 rounded-full bg-rose-300/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🏙️</button>
-                    <button class="w-7 h-7 rounded-full bg-slate-900/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌙</button>
-                </div>
-            </div>
-
-            <!-- 2. WIDGET WAKTU, TANGGAL, BULAN, & TAHUN -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg text-center">
-                <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-1">DATE & TIME</div>
-                <div id="live-time" class="text-2xl font-bold text-gray-900 tracking-wider">00:00:00</div>
-                <div id="live-date" class="text-xs text-gray-700 mt-1 font-semibold">Senin, 1 Januari 2026</div>
-            </div>
-
-            <!-- 3. WIDGET NOW PLAYING (TRANSPARAN GLASS-PANEL) -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg flex flex-col relative">
-                <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-3 uppercase">Now Playing</div>
-                
-                <div class="bg-[#48534f] rounded-xl p-3 flex flex-col text-white shadow-inner relative font-sans">
-                    <!-- Top Section: Art & Playlist -->
-                    <div class="flex h-[88px] mb-3 relative">
-                        <!-- Album Art Menggunakan cover.gif -->
-                        <div class="w-[88px] h-[88px] bg-gray-300 rounded-md overflow-hidden shrink-0 shadow">
-                            <img id="current-album-img" src="cover.gif" alt="Album Art" class="w-full h-full object-cover">
-                        </div>
-                        
-                        <!-- Playlist Tracks (Daftar Lagu) -->
-                        <div id="playlist-container" class="flex-1 ml-3 overflow-y-auto text-[11px] space-y-[7px] pr-8 custom-scrollbar">
-                            <!-- Dimuat via JavaScript -->
-                        </div>
-                        
-                        <!-- Spotify Logo Floating -->
-                        <div class="absolute top-0 right-0 text-white z-10 pointer-events-none">
-                            <svg class="w-[22px] h-[22px] fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.567 17.316c-.218.358-.679.473-1.037.255-2.844-1.737-6.425-2.131-10.637-1.168-.403.093-.801-.167-.894-.57-.093-.403.167-.801.57-.894 4.544-1.049 8.524-.61 11.745 1.354.358.218.473.679.253 1.033zm1.488-3.308c-.274.444-.863.585-1.307.311-3.268-2.008-8.252-2.593-12.112-1.42-.511.155-1.054-.131-1.209-.642-.155-.511.131-1.054.642-1.209 4.316-1.31 9.805-.664 13.593 1.662.444.274.585.863.311 1.302-.001-.004-.002-.004-.002 0zm.127-3.468c-3.918-2.325-10.38-2.541-14.129-1.396-.605.184-1.252-.153-1.436-.758-.184-.605.153-1.252.758-1.436 4.194-1.275 11.332-1.026 15.828 1.691.547.324.729 1.035.405 1.582-.324.547-1.035.729-1.582.405-.001.001-.002.001-.004-.003z"/></svg>
-                        </div>
-                    </div>
-
-                    <!-- Title & Author Dinamis -->
-                    <div id="current-song-title" class="text-[12px] font-semibold mb-3 tracking-wide truncate">168 · Monita Tahalea</div>
-
-                    <!-- Controls Section -->
-                    <div class="flex items-center justify-between">
-                        <!-- Left Actions: Prev, Seek Slider, Next, Timer, Volume -->
-                        <div class="flex items-center space-x-[7px]">
-                            <button onclick="prevSong()" class="hover:text-gray-300 cursor-pointer">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-                            </button>
-                            <!-- Seek Slider (Garis Antara Previous & Next) -->
-                            <input type="range" id="seek-slider" min="0" max="100" value="0" step="0.1" class="w-10 h-1 accent-white bg-gray-500 rounded-lg appearance-none cursor-pointer">
-                            <button onclick="nextSong()" class="hover:text-gray-300 cursor-pointer">
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-                            </button>
-                            
-                            <!-- Durasi Waktu Musik -->
-                            <span id="song-timer" class="text-[10px] font-medium text-gray-300">00:00</span>
-
-                            <!-- Volume Icon & Slider -->
-                            <div class="flex items-center space-x-1">
-                                <svg class="w-4 h-4 fill-current text-gray-300 shrink-0" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" class="w-9 h-1 accent-white bg-gray-500 rounded-lg appearance-none cursor-pointer">
-                            </div>
-                        </div>
-
-                        <!-- Right Actions: More, Play -->
-                        <div class="flex items-center space-x-[9px]">
-                            <!-- More (...) button -->
-                            <button class="hover:text-gray-300 font-bold pb-2.5 text-lg tracking-[2px]">...</button>
-                            
-                            <!-- Main Play/Pause Button -->
-                            <button id="play-btn" onclick="togglePlay()" class="w-[34px] h-[34px] rounded-full bg-white text-[#48534f] flex items-center justify-center hover:scale-105 transition shadow-sm cursor-pointer">
-                                <svg id="play-icon" class="w-[18px] h-[18px] ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                                <svg id="pause-icon" class="w-[18px] h-[18px] hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tautan Open in Spotify -->
-                <a href="https://open.spotify.com/playlist/6ZJ9ruEkcWD1UNyFMQrEEo?si=8c84d91697ef42a7" target="_blank" class="mt-2.5 text-[11px] text-gray-800 hover:text-black tracking-wider flex items-center transition font-semibold w-max cursor-pointer">
-                    open in spotify &rarr;
-                </a>
-            </div>
-
-        </div>
     </div>
 
     <!-- DOCK / TASKBAR SOSIAL MEDIA DI BAGIAN BAWAH -->
