@@ -157,15 +157,11 @@
                 flex-direction: column !important;
                 gap: 14px !important;
             }
-            /* 1. Wallpaper di urutan ke-1 */
+            /* 1. Tanggal & Waktu di urutan ke-1 */
             .w-\[330px\] > div:nth-child(1) {
                 order: 1 !important;
             }
-            /* 2. Tanggal & Waktu di urutan ke-2 */
-            .w-\[330px\] > div:nth-child(2) {
-                order: 2 !important;
-            }
-            /* 3. 8 Ikon Utama di urutan ke-3 (Menggunakan flex/grid manual agar urutan flexbox konsisten) */
+            /* 2. 8 Ikon Utama di urutan ke-2 (Menggunakan flex/grid manual agar urutan flexbox konsisten) */
             .absolute.left-1\/2.top-1\/2 {
                 position: relative !important;
                 top: auto !important;
@@ -177,11 +173,11 @@
                 width: 100% !important;
                 max-width: 375px !important;
                 justify-items: center !important;
-                order: 3 !important;
+                order: 2 !important;
             }
-            /* 4. Widget Musik dipaksa persis di bawah 8 ikon utama (urutan ke-4) */
-            .w-\[330px\] > div:nth-child(3) {
-                order: 4 !important;
+            /* 3. Widget Musik dipaksa persis di bawah 8 ikon utama (urutan ke-3) */
+            .w-\[330px\] > div:nth-child(2) {
+                order: 3 !important;
             }
             footer {
                 margin-top: 20px !important;
@@ -232,25 +228,14 @@
         <!-- WIDGETS DI KANAN / TENGAH (DIV UTAMA) -->
         <div class="w-[330px] flex flex-col space-y-4 z-10">
 
-            <!-- 1. WIDGET WALLPAPER -->
-            <div class="glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between">
-                <span class="text-[10px] tracking-widest text-gray-800 font-bold">WALLPAPER</span>
-                <div class="flex space-x-2">
-                    <button class="w-7 h-7 rounded-full bg-amber-200/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">☀️</button>
-                    <button class="w-7 h-7 rounded-full bg-emerald-700/80 border-2 border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌿</button>
-                    <button class="w-7 h-7 rounded-full bg-rose-300/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🏙️</button>
-                    <button class="w-7 h-7 rounded-full bg-slate-900/80 border border-white flex items-center justify-center text-xs shadow hover:scale-110 transition">🌙</button>
-                </div>
-            </div>
-
-            <!-- 2. WIDGET WAKTU, TANGGAL, BULAN, & TAHUN -->
+            <!-- 1. WIDGET WAKTU, TANGGAL, BULAN, & TAHUN -->
             <div class="glass-panel p-4 rounded-2xl shadow-lg text-center">
                 <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-1">DATE & TIME</div>
                 <div id="live-time" class="text-2xl font-bold text-gray-900 tracking-wider">00:00:00</div>
                 <div id="live-date" class="text-xs text-gray-700 mt-1 font-semibold">Senin, 1 Januari 2026</div>
             </div>
 
-            <!-- 3. WIDGET NOW PLAYING (POSISI DI BAWAH 8 IKON PADA TAMPILAN HP) -->
+            <!-- 2. WIDGET NOW PLAYING (POSISI DI BAWAH 8 IKON PADA TAMPILAN HP) -->
             <div class="glass-panel p-4 rounded-2xl shadow-lg flex flex-col relative">
                 <div class="text-[10px] tracking-widest text-gray-800 font-bold mb-3 uppercase">Now Playing</div>
                 
@@ -763,10 +748,10 @@
                         </div>
                     </div>
                     <div class="mt-4 flex flex-col space-y-2">
-                        <!-- BAGIAN INPUT NAMA DAN PESAN (DIBAGI RATA PADA TAMPILAN HP MENGGUNAKAN GRID) -->
-                        <div class="grid grid-cols-1 md:flex md:items-center gap-2 md:space-x-3">
+                        <!-- INPUT NAMA DAN PESAN (DIBAGI RATA PADA TAMPILAN HP MENGGUNAKAN GRID) -->
+                        <div class="grid grid-cols-2 md:flex md:items-center gap-2 md:space-x-3">
                             <input type="text" id="author-input" placeholder="name (optional)" class="w-full md:w-1/3 bg-white border border-[#d6ccb8] px-3 py-2 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-1 focus:ring-stone-500 shadow-sm">
-                            <div class="flex items-center space-x-2 flex-1">
+                            <div class="flex items-center space-x-2 col-span-2 md:col-span-auto md:flex-1">
                                 <input type="text" id="message-input" placeholder="Say hi 👋 (optional)" class="w-full md:flex-1 bg-white border border-[#d6ccb8] px-3 py-2 rounded-xl text-xs text-stone-800 focus:outline-none focus:ring-1 focus:ring-stone-500 shadow-sm">
                                 <button onclick="postStickyNote()" class="bg-[#2c2b29] hover:bg-black text-white px-6 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer flex items-center space-x-1 shrink-0">
                                     <span>post</span>
