@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio OS Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* Efek kaca transparan (Glassmorphism) */
         .glass-panel {
@@ -848,6 +850,29 @@
 
     <script>
         // -----------------------------------------------------------
+        // KONTROL SUPABASE
+        // -----------------------------------------------------------
+        const SUPABASE_URL = 'https://mfjnittwxbelgkfuqwrf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mam5pdHR3eGJlbGdrZnVwd3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzOTE4NjIsImV4cCI6MjEwMTk2Nzg2Mn0.qUVLnq3BPky0KOsv8QdRVNQI0e6vlm04O_ToVzo7_rI';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let stickyNotesData = [];
+
+        async function fetchStickyNotes() {
+            const { data, error } = await _supabase
+                .from('sticky_notes')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Gagal memuat pesan:', error);
+            } else {
+                stickyNotesData = data || [];
+                renderWall();
+            }
+        }
+
+        // -----------------------------------------------------------
         // KONTROL WAKTU
         // -----------------------------------------------------------
         setInterval(() => {
@@ -1113,11 +1138,6 @@
             renderSuggestions();
         }
 
-        let stickyNotesData = [
-            { name: "DANI", message: "HELLO", image: null, bg: "bg-[#c5dbcc]" },
-            { name: "NITYA", message: "HELLO", image: null, bg: "bg-[#b3cbd0]" },
-        ];
-
         let canvas, ctx;
         let isDrawing = false;
         let currentTool = 'pen';
@@ -1126,7 +1146,7 @@
         function openStickyWindow() {
             document.getElementById('sticky-modal').classList.remove('hidden');
             initCanvas();
-            renderWall();
+            fetchStickyNotes();
         }
 
         function closeStickyWindow() {
@@ -1218,27 +1238,84 @@
             } else {
                 viewWall.classList.remove('hidden');
                 viewCreate.classList.add('hidden');
-                renderWall();
+                fetchStickyNotes();
             }
         }
 
-        function postStickyNote() {
-            const author = document.getElementById('author-input').value.trim() || "ANON";
-            const message = document.getElementById('message-input').value.trim() || "HELLO";
-            const dataURL = canvas.toDataURL();
-            stickyNotesData.unshift({ name: author.toUpperCase(), message: message.toUpperCase(), image: dataURL, bg: "bg-[#c5dbcc]" });
-            clearCanvas();
-            switchStickyTab('wall');
+        async function postStickyNote() {
+            const authorInput = document.getElementById('author-input');
+            const messageInput = document.getElementById('message-input');
+            
+            const author = authorInput.value.trim() || "ANON";
+            const message = messageInput.value.trim() || "HELLO";
+            
+            const dataURL = canvas.toDataURL('image/png');
+            const blob = await fetch(dataURL).then(res => res.blob());
+            const fileName = `note_${Date.now()}.png`;
+
+            const { data: storageData, error: storageError } = await _supabase.storage
+                .from('note-images')
+                .upload(fileName, blob);
+
+            let publicImageUrl = null;
+            if (!storageError) {
+                const { data: publicURLData } = _supabase.storage
+                    .from('note-images')
+                    .getPublicUrl(fileName);
+                publicImageUrl = publicURLData.publicUrl;
+            }
+
+            const { error: dbError } = await _supabase
+                .from('sticky_notes')
+                .insert([{ 
+                    name: author.toUpperCase(), 
+                    message: message.toUpperCase(), 
+                    image_url: publicImageUrl 
+                }]);
+
+            if (dbError) {
+                alert('Gagal mengirim pesan, Coba lagi!');
+                console.error(dbError);
+            } else {
+                authorInput.value = "";
+                messageInput.value = "";
+                clearCanvas();
+                await fetchStickyNotes();
+                switchStickyTab('wall');
+            }
         }
 
         function renderWall() {
             const grid = document.getElementById('wall-grid');
-            document.getElementById('wall-count').innerText = stickyNotesData.length;
+            const wallCountElem = document.getElementById('wall-count');
+            if(wallCountElem) wallCountElem.innerText = stickyNotesData.length;
+            
+            if(!grid) return;
             grid.innerHTML = "";
+
+            if (stickyNotesData.length === 0) {
+                grid.innerHTML = '<div class="col-span-3 text-center text-stone-400 text-xs py-8">Belum ada pesan di wall. Jadilah yang pertama mengirim pesan! ✨</div>';
+                return;
+            }
+
             stickyNotesData.forEach(note => {
                 const card = document.createElement('div');
-                card.className = `${note.bg} p-5 rounded-xl shadow-sm flex flex-col justify-between h-72 border border-black/5 relative overflow-hidden`;
-                card.innerHTML = `<div class="flex-1 flex items-center justify-center overflow-hidden my-2"><img src="${note.image}" class="max-h-40 object-contain"></div><div class="mt-auto"><div class="text-xs font-bold">${note.name}</div><div class="text-[11px] font-semibold">${note.message}</div></div>`;
+                card.className = `bg-[#c5dbcc] p-4 rounded-xl shadow-sm flex flex-col justify-between h-64 border border-black/5 relative overflow-hidden`;
+                
+                let imageHtml = '';
+                if (note.image_url) {
+                    imageHtml = `<div class="flex-1 flex items-center justify-center overflow-hidden my-1"><img src="${note.image_url}" class="max-h-32 object-contain rounded"></div>`;
+                } else {
+                    imageHtml = `<div class="flex-1"></div>`;
+                }
+
+                card.innerHTML = `
+                    ${imageHtml}
+                    <div class="mt-auto pt-2 border-t border-black/5">
+                        <div class="text-xs font-bold text-stone-900">${note.name}</div>
+                        <div class="text-[11px] font-semibold text-stone-700 truncate">${note.message}</div>
+                    </div>
+                `;
                 grid.appendChild(card);
             });
         }
@@ -1420,6 +1497,9 @@
             document.getElementById('resume-modal').classList.add('hidden');
         }
 
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchStickyNotes();
+        });
     </script>
 </body>
 </html>
