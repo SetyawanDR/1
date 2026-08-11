@@ -1253,16 +1253,19 @@
             const blob = await fetch(dataURL).then(res => res.blob());
             const fileName = `note_${Date.now()}.png`;
 
+            let publicImageUrl = null;
+
             const { data: storageData, error: storageError } = await _supabase.storage
                 .from('note-images')
                 .upload(fileName, blob);
 
-            let publicImageUrl = null;
-            if (!storageError) {
+            if (storageError) {
+                console.error('Gagal upload gambar ke Storage:', storageError.message);
+            } else {
                 const { data: publicURLData } = _supabase.storage
                     .from('note-images')
                     .getPublicUrl(fileName);
-                publicImageUrl = publicURLData.publicUrl;
+                publicImageUrl = publicURLData ? publicURLData.publicUrl : null;
             }
 
             const { error: dbError } = await _supabase
@@ -1275,7 +1278,7 @@
 
             if (dbError) {
                 alert('Gagal mengirim pesan, Coba lagi!');
-                console.error(dbError);
+                console.error('Gagal simpan ke database:', dbError);
             } else {
                 authorInput.value = "";
                 messageInput.value = "";
