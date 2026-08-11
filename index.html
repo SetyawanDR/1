@@ -699,16 +699,13 @@
                     <div class="space-y-3">
                         <div class="flex justify-between items-center text-xs">
                             <div class="space-x-3">
-                                <button onclick="switchTab('suggestions')" id="tab-suggestions" class="font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer">community suggestions (<span id="count-suggestions">4</span>)</button>
+                                <button onclick="switchTab('suggestions')" id="tab-suggestions" class="font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5 cursor-pointer">community suggestions (<span id="count-suggestions">0</span>)</button>
                                 <button onclick="switchTab('archive')" id="tab-archive" class="text-gray-400 hover:text-slate-700 pb-0.5 cursor-pointer">archive (<span id="count-archive">0</span>)</button>
                             </div>
                         </div>
 
                         <div id="suggestion-list-container" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tower of god</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">In order to live by Yeonmi Park</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">tswift</div>
-                            <div class="bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm">the bear</div>
+                            <!-- Dimuat dari database -->
                         </div>
                     </div>
                 </div>
@@ -1074,17 +1071,41 @@
             document.getElementById('app-modal').classList.add('hidden');
         }
 
-        let communitySuggestions = ["tower of god", "In order to live by Yeonmi Park", "tswift", "the bear"];
-        let archiveSuggestions = [];
+        // -----------------------------------------------------------
+        // KONTROL COMMUNITY SUGGESTIONS (TERHUBUNG SUPABASE)
+        // -----------------------------------------------------------
+        let suggestionsData = [];
         let currentTab = 'suggestions';
 
-        function addSuggestion() {
+        async function fetchSuggestions() {
+            const { data, error } = await _supabase
+                .from('suggestions')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Gagal memuat suggestions:', error);
+            } else {
+                suggestionsData = data || [];
+                renderSuggestions();
+            }
+        }
+
+        async function addSuggestion() {
             const input = document.getElementById('suggestion-input');
             const val = input.value.trim();
             if(val !== "") {
-                communitySuggestions.unshift(val);
-                input.value = "";
-                renderSuggestions();
+                const { error } = await _supabase
+                    .from('suggestions')
+                    .insert([{ suggestion_text: val, status: 'active' }]);
+
+                if (error) {
+                    alert('Gagal menambahkan suggestion!');
+                    console.error(error);
+                } else {
+                    input.value = "";
+                    await fetchSuggestions();
+                }
             }
         }
 
@@ -1105,37 +1126,41 @@
 
         function renderSuggestions() {
             const container = document.getElementById('suggestion-list-container');
-            document.getElementById('count-suggestions').innerText = communitySuggestions.length;
-            document.getElementById('count-archive').innerText = archiveSuggestions.length;
+            const activeList = suggestionsData.filter(item => currentTab === 'suggestions' ? item.status === 'active' : item.status === 'archive');
+            
+            document.getElementById('count-suggestions').innerText = suggestionsData.filter(i => i.status === 'active').length;
+            document.getElementById('count-archive').innerText = suggestionsData.filter(i => i.status === 'archive').length;
 
             container.innerHTML = "";
-            const activeList = currentTab === 'suggestions' ? communitySuggestions : archiveSuggestions;
 
             if(activeList.length === 0) {
                 container.innerHTML = '<div class="text-center text-gray-400 text-xs py-4">Belum ada item di sini.</div>';
                 return;
             }
 
-            activeList.forEach((item, index) => {
+            activeList.forEach((item) => {
                 const div = document.createElement('div');
                 div.className = "bg-white/70 border border-gray-200 px-3 py-2 rounded-xl text-xs text-slate-700 shadow-sm flex justify-between items-center group";
                 div.innerHTML = `
-                    <span>${item}</span>
-                    <button onclick="moveItem(${index})" class="text-[10px] text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition cursor-pointer" title="Pindah tab">✕</button>
+                    <span>${item.suggestion_text}</span>
+                    <button onclick="toggleArchive(${item.id}, '${item.status}')" class="text-[10px] text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition cursor-pointer" title="Pindah tab">✕</button>
                 `;
                 container.appendChild(div);
             });
         }
 
-        function moveItem(index) {
-            if(currentTab === 'suggestions') {
-                const item = communitySuggestions.splice(index, 1)[0];
-                archiveSuggestions.unshift(item);
+        async function toggleArchive(id, currentStatus) {
+            const newStatus = currentStatus === 'active' ? 'archive' : 'active';
+            const { error } = await _supabase
+                .from('suggestions')
+                .update({ status: newStatus })
+                .eq('id', id);
+
+            if (error) {
+                console.error('Gagal memperbarui status:', error);
             } else {
-                const item = archiveSuggestions.splice(index, 1)[0];
-                communitySuggestions.unshift(item);
+                await fetchSuggestions();
             }
-            renderSuggestions();
         }
 
         let canvas, ctx;
@@ -1249,23 +1274,27 @@
             const author = authorInput.value.trim() || "ANON";
             const message = messageInput.value.trim() || "HELLO";
             
-            const dataURL = canvas.toDataURL('image/png');
-            const blob = await fetch(dataURL).then(res => res.blob());
-            const fileName = `note_${Date.now()}.png`;
-
             let publicImageUrl = null;
 
-            const { data: storageData, error: storageError } = await _supabase.storage
-                .from('note-images')
-                .upload(fileName, blob);
+            try {
+                const dataURL = canvas.toDataURL('image/png');
+                const blob = await fetch(dataURL).then(res => res.blob());
+                const fileName = `note_${Date.now()}.png`;
 
-            if (storageError) {
-                console.error('Gagal upload gambar ke Storage:', storageError.message);
-            } else {
-                const { data: publicURLData } = _supabase.storage
+                const { data: storageData, error: storageError } = await _supabase.storage
                     .from('note-images')
-                    .getPublicUrl(fileName);
-                publicImageUrl = publicURLData ? publicURLData.publicUrl : null;
+                    .upload(fileName, blob);
+
+                if (!storageError) {
+                    const { data: publicURLData } = _supabase.storage
+                        .from('note-images')
+                        .getPublicUrl(fileName);
+                    publicImageUrl = publicURLData ? publicURLData.publicUrl : null;
+                } else {
+                    console.warn('Gagal upload gambar, melanjutkan dengan teks saja:', storageError.message);
+                }
+            } catch (err) {
+                console.warn('Canvas/Storage error:', err);
             }
 
             const { error: dbError } = await _supabase
@@ -1323,7 +1352,10 @@
             });
         }
 
-        function openMyselfWindow() { document.getElementById('myself-modal').classList.remove('hidden'); renderSuggestions(); }
+        function openMyselfWindow() { 
+            document.getElementById('myself-modal').classList.remove('hidden'); 
+            fetchSuggestions(); 
+        }
         function closeMyselfWindow() { document.getElementById('myself-modal').classList.add('hidden'); }
         
         function openPhotosWindow() { 
@@ -1502,6 +1534,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             fetchStickyNotes();
+            fetchSuggestions();
         });
     </script>
 </body>
