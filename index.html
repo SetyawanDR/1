@@ -780,6 +780,25 @@
         </div>
     </div>
 
+    <!-- MODAL POPUP FULLSCREEN UNTUK MELIHAT PESAN & GAMBAR STICKY NOTE SECARA BESAR -->
+    <div id="note-detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[70] flex items-center justify-center hidden p-6" onclick="closeNoteDetail()">
+        <div class="bg-[#f4eee1] w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col p-6 text-stone-800 relative border border-[#d6ccb8]" onclick="event.stopPropagation()">
+            <button onclick="closeNoteDetail()" class="absolute top-4 right-4 text-stone-500 hover:text-stone-900 text-lg font-bold cursor-pointer">✕</button>
+            <div class="text-[10px] uppercase font-bold text-stone-500 tracking-wider mb-2">Sticky Note Details</div>
+            
+            <!-- Tempat Gambar Besar -->
+            <div id="detail-image-container" class="w-full h-72 bg-white rounded-xl border border-[#d6ccb8] flex items-center justify-center overflow-hidden mb-4 shadow-inner">
+                <!-- Diisi via JS -->
+            </div>
+
+            <!-- Teks Pesan & Pengirim Lengkap -->
+            <div class="bg-white/80 p-4 rounded-xl border border-[#d6ccb8] space-y-2">
+                <div class="text-xs font-bold text-stone-900 tracking-wide" id="detail-author">-</div>
+                <div class="text-sm font-medium text-stone-700 leading-relaxed break-words" id="detail-message">-</div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL KHUSUS RESUME (SELURUH JENDELA BISA DI-SCROLL) -->
     <div id="resume-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
@@ -1332,7 +1351,7 @@
 
             stickyNotesData.forEach(note => {
                 const card = document.createElement('div');
-                card.className = `bg-[#c5dbcc] p-4 rounded-xl shadow-sm flex flex-col justify-between h-64 border border-black/5 relative overflow-hidden`;
+                card.className = `bg-[#c5dbcc] p-4 rounded-xl shadow-sm flex flex-col justify-between h-64 border border-black/5 relative overflow-hidden cursor-pointer hover:shadow-md hover:scale-[1.02] transition`;
                 
                 let imageHtml = '';
                 if (note.image_url) {
@@ -1348,8 +1367,36 @@
                         <div class="text-[11px] font-semibold text-stone-700 truncate">${note.message}</div>
                     </div>
                 `;
+                
+                // Ketika kartu diklik, buka modal detail fullscreen
+                card.onclick = () => openNoteDetail(note);
                 grid.appendChild(card);
             });
+        }
+
+        // Fungsi Membuka Modal Detail Sticky Note
+        function openNoteDetail(note) {
+            const modal = document.getElementById('note-detail-modal');
+            const imgContainer = document.getElementById('detail-image-container');
+            const authorElem = document.getElementById('detail-author');
+            const messageElem = document.getElementById('detail-message');
+
+            authorElem.innerText = note.name;
+            messageElem.innerText = note.message;
+
+            if (note.image_url) {
+                imgContainer.innerHTML = `<img src="${note.image_url}" class="max-h-full max-w-full object-contain rounded">`;
+                imgContainer.style.display = 'flex';
+            } else {
+                imgContainer.innerHTML = `<span class="text-xs text-stone-400 italic">Tidak ada coretan gambar</span>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Fungsi Menutup Modal Detail Sticky Note
+        function closeNoteDetail() {
+            document.getElementById('note-detail-modal').classList.add('hidden');
         }
 
         function openMyselfWindow() { 
