@@ -209,7 +209,7 @@
     </video>
 
     <!-- ELEMEN AUDIO UNTUK FOLDER MUSIC -->
-    <audio id="bg-audio">
+    <audio id="bg-audio" preload="auto">
         Browser Anda tidak mendukung elemen audio.
     </audio>
 
@@ -850,7 +850,7 @@
 
     <!-- MODAL LIGHTBOX PREVIEW VIDEO -->
     <div id="video-viewer-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] flex items-center justify-center hidden p-6" onclick="closeVideoViewer()">
-        <div class="relative max-w-4xl max-h-full flex flex-col items-center w-full" onclick="event.stopPropagation()">
+        <div class="root relative max-w-4xl max-h-full flex flex-col items-center w-full" onclick="event.stopPropagation()">
             <button onclick="closeVideoViewer()" class="absolute -top-10 right-0 text-white text-2xl font-bold hover:text-gray-300 cursor-pointer z-10">✕</button>
             <video id="viewer-video" src="" controls class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain border border-white/20"></video>
         </div>
@@ -1021,6 +1021,25 @@
         });
 
         loadSong(0);
+
+        // Auto-play music with fallback interaction listener for browser autoplay policies
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.volume = volSlider.value;
+            playAudio();
+            
+            // Fallback: if browser blocks autoplay, start playing on first user interaction anywhere on the page
+            const triggerAutoplay = () => {
+                if (!isPlaying) {
+                    playAudio();
+                }
+                window.removeEventListener('click', triggerAutoplay);
+                window.removeEventListener('keydown', triggerAutoplay);
+                window.removeEventListener('touchstart', triggerAutoplay);
+            };
+            window.addEventListener('click', triggerAutoplay);
+            window.addEventListener('keydown', triggerAutoplay);
+            window.addEventListener('touchstart', triggerAutoplay);
+        });
 
         // -----------------------------------------------------------
         // FUNGSI NOTEBOOK & JENDELA UMUM
@@ -1664,7 +1683,6 @@
                 };
 
                 item.onclick = () => openVideoViewer(videoPath);
-                grid.appendChild(item);
             }
             setTimeout(() => { loading.style.display = 'none'; }, 2500);
         }
