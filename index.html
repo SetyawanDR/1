@@ -1712,7 +1712,7 @@
                     if (loadedCount >= 5) { loading.style.display = 'none'; }
                 }, 400);
 
-                    grid.appendChild(item);
+                grid.appendChild(item);
             }
             setTimeout(() => { loading.style.display = 'none'; }, 2000);
         }
@@ -1765,6 +1765,7 @@
                 };
 
                 item.onclick = () => openVideoViewer(videoPath);
+                grid.appendChild(item);
             }
             setTimeout(() => { loading.style.display = 'none'; }, 2500);
         }
@@ -1785,7 +1786,7 @@
         }
 
         function openResumeWindow() {
-            document.indeks.getElementById('resume-modal').classList.remove('hidden');
+            document.getElementById('resume-modal').classList.remove('hidden');
         }
         function closeResumeWindow() {
             document.getElementById('resume-modal').classList.add('hidden');
