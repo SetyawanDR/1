@@ -341,12 +341,12 @@
                 <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide text-center">next level sketch</span>
             </div>
 
-            <!-- 5. resume -->
-            <div onclick="openResumeWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
+            <!-- 5. licenses & certifications (sebelumnya resume) -->
+            <div onclick="openCertificationsWindow()" class="desktop-item flex flex-col items-center cursor-pointer group">
                 <div class="w-20 h-20 glass-panel rounded-2xl flex items-center justify-center shadow-lg text-4xl group-hover:bg-white/40 transition">
                     📄
                 </div>
-                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide">resume</span>
+                <span class="text-[11px] mt-2 text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] tracking-wide text-center">licenses & certifications</span>
             </div>
 
             <!-- 6. myself -->
@@ -708,7 +708,7 @@
                         <span class="text-lg">✏️</span> PEN
                     </button>
                     <button onclick="setTool('eraser')" id="tool-eraser" class="flex flex-col items-center text-[10px] font-semibold text-stone-800 hover:opacity-100 opacity-70 transition cursor-pointer">
-                        <span class="text-lg">👝</span> ERASER
+                        <span class="text-lg">🧹</span> ERASER
                     </button>
                     <!-- TOMBOL EMBER CAT (PAINT BUCKET) -->
                     <button onclick="setTool('fill')" id="tool-fill" class="flex flex-col items-center text-[10px] font-semibold text-stone-800 hover:opacity-100 opacity-70 transition cursor-pointer">
@@ -798,50 +798,25 @@
         </div>
     </div>
 
-    <!-- MODAL KHUSUS RESUME (SELURUH JENDELA BISA DI-SCROLL) -->
-    <div id="resume-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <!-- MODAL KHUSUS LICENSES & CERTIFICATIONS (1 BARIS KE BAWAH) -->
+    <div id="certifications-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="w-[850px] h-[550px] bg-[#f5f5f7] rounded-xl shadow-2xl overflow-hidden flex flex-col text-slate-800 border border-gray-300">
             <!-- Header Bilah Atas Ala MacOS -->
             <div class="px-4 py-3 bg-[#e3e3e5] flex justify-between items-center border-b border-gray-300 shrink-0">
-                <span class="text-xs font-semibold text-gray-700">Resume</span>
-                <button onclick="closeResumeWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
+                <span class="text-xs font-semibold text-gray-700">Licenses & certifications</span>
+                <button onclick="closeCertificationsWindow()" class="text-gray-500 hover:text-black text-base font-bold px-1.5 cursor-pointer">✕</button>
             </div>
             
-            <!-- Konten di dalam Jendela (Seluruh jendela yang bisa di-scroll tanpa scrollbar bawaan) -->
-            <div class="flex-1 p-8 overflow-y-auto flex flex-col items-center custom-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
-                <style>
-                    #resume-modal .overflow-y-auto::-webkit-scrollbar {
-                        display: none;
-                    }
-                </style>
-                <!-- PDF Preview Diperbesar -->
-                <div class="w-full max-w-[650px] h-[750px] bg-white shadow-md border border-gray-200 mb-6 overflow-hidden rounded-lg shrink-0">
-                    <iframe src="resume/resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="w-full h-full border-none pointer-events-none"></iframe>
-                </div>
-
-                <!-- Title & Name -->
-                <h2 class="text-lg font-bold text-black mb-0.5">Resume</h2>
-                <p class="text-xs text-gray-600 mb-2">Setyawan Dwi Rachmadhan</p>
+            <!-- Konten Galeri 1 Baris ke Bawah -->
+            <div class="flex-1 p-8 overflow-y-auto flex flex-col items-center custom-scrollbar">
+                <h2 class="text-lg font-bold text-black mb-1">Licenses & Certifications</h2>
+                <p class="text-xs text-gray-500 mb-6">Sertifikat dan Lisensi yang telah diperoleh</p>
                 
-                <!-- Link Open PDF -->
-                <a href="resume/resume.pdf" target="_blank" class="text-xs font-semibold text-gray-900 border-b border-gray-900 pb-[1px] hover:text-black mb-8 cursor-pointer flex items-center space-x-1 transition">
-                    <span>open_pdf</span>
-                    <span class="text-[10px]">↗</span>
-                </a>
-
-                <!-- Info Grid (Metadata) - Posisi di Tengah -->
-                <div class="w-full max-w-[280px] grid grid-cols-[80px_1fr] gap-y-1.5 text-xs text-gray-800 mb-4">
-                    <div class="text-right text-gray-400 pr-3">Kind</div>
-                    <div class="text-left">PDF Document</div>
-                    
-                    <div class="text-right text-gray-400 pr-3">Size</div>
-                    <div class="text-left">1 MB</div>
-                    
-                    <div class="text-right text-gray-400 pr-3">Where</div>
-                    <div class="text-left">Desktop</div>
-                    
-                    <div class="text-right text-gray-400 pr-3">Modified</div>
-                    <div class="text-left">Agustus 2026</div>
+                <div id="certifications-loading" class="text-xs text-gray-500 italic py-4">Memuat sertifikat...</div>
+                
+                <!-- Kontainer Daftar Gambar Vertikal (1 Baris ke Bawah) -->
+                <div id="certifications-grid" class="w-full max-w-[650px] flex flex-col space-y-6 pb-6">
+                    <!-- Dimuat dinamis via JavaScript -->
                 </div>
             </div>
         </div>
@@ -1785,11 +1760,59 @@
             videoViewer.src = "";
         }
 
-        function openResumeWindow() {
-            document.getElementById('resume-modal').classList.remove('hidden');
+        // FUNGSI UNTUK MEMBUKA MODAL LICENSES & CERTIFICATIONS
+        function openCertificationsWindow() {
+            document.getElementById('certifications-modal').classList.remove('hidden');
+            loadCertificationsFolder();
         }
-        function closeResumeWindow() {
-            document.getElementById('resume-modal').classList.add('hidden');
+        
+        function closeCertificationsWindow() {
+            document.getElementById('certifications-modal').classList.add('hidden');
+        }
+
+        function loadCertificationsFolder() {
+            const grid = document.getElementById('certifications-grid');
+            const loading = document.getElementById('certifications-loading');
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+
+            let loadedCount = 0;
+            const totalItems = 20; // Jumlah maksimal file sertifikat yang dicek
+
+            for (let i = 1; i <= totalItems; i++) {
+                const imgPath = `Licenses & certifications/Licenses & certifications (${i}).jpg`;
+                const item = document.createElement('div');
+                item.className = 'w-full bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 cursor-pointer transform hover:scale-[1.01] transition relative group';
+                item.style.display = 'none';
+
+                const img = document.createElement('img');
+                img.className = 'w-full h-auto object-contain block';
+                img.src = imgPath;
+
+                img.onload = () => {
+                    item.style.display = 'block';
+                    loadedCount++;
+                    if (loadedCount >= 3) { loading.style.display = 'none'; }
+                };
+
+                img.onerror = () => {
+                    item.remove();
+                    loadedCount++;
+                    if (loadedCount >= totalItems) { loading.style.display = 'none'; }
+                };
+
+                item.appendChild(img);
+
+                const overlay = document.createElement('div');
+                overlay.className = 'absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-bold tracking-wider';
+                overlay.innerText = 'KLIK UNTUK MEMPERBESAR';
+                item.appendChild(overlay);
+
+                item.onclick = () => openImageViewer(imgPath);
+                grid.appendChild(item);
+            }
+
+            setTimeout(() => { loading.style.display = 'none'; }, 2500);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
